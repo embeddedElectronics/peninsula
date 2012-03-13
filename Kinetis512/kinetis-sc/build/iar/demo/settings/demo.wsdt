@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+    
+    
+  <CurrentConfigs><Project>demo_k60_tower/RAM_64KB</Project><Project>demo_k40_tower/RAM_128KB</Project></CurrentConfigs><CurrentProj>demo_k60_tower</CurrentProj><OverviewSelected>1</OverviewSelected></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>608</ColumnWidth1><ColumnWidth2>162</ColumnWidth2><ColumnWidth3>40</ColumnWidth3></Build>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>221</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+    <TerminalIO/><Debug-Log><ColumnWidth0>19</ColumnWidth0><ColumnWidth1>1308</ColumnWidth1></Debug-Log></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-23175-5790</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-27569-825</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>1</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-1155-5793</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>&lt;ws></ExpandedNode><ExpandedNode>&lt;ws>/demo_k60_tower</ExpandedNode><ExpandedNode>&lt;ws>/demo_k60_tower/project</ExpandedNode><ExpandedNode>&lt;ws>/demo_k60_tower/project/demo.c</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\demo\isr.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>492</SelStart><SelEnd>492</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\demo\demo.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>349</SelStart><SelEnd>349</SelEnd></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\cpu\crt0.s</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>218</SelStart><SelEnd>218</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\drivers\uart\uart.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>2885</SelStart><SelEnd>2885</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\iar.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>2</SelStart><SelEnd>2</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-01b0d998><key>iaridepm.enu1</key></Toolbar-01b0d998></Sizes></Row0></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>395</Bottom><Right>312</Right><x>-2</x><y>-2</y><xscreen>314</xscreen><yscreen>248</yscreen><sizeHorzCX>229868</sizeHorzCX><sizeHorzCY>361516</sizeHorzCY><sizeVertCX>229868</sizeVertCX><sizeVertCY>578717</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>246</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>248</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>361516</sizeHorzCY><sizeVertCX>229868</sizeVertCX><sizeVertCY>361516</sizeVertCY></Rect></Wnd0></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

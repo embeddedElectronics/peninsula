@@ -1,0 +1,40 @@
+[DebugChecksum]
+Checksum=-1783946488
+[Exceptions]
+StopOnUncaught=_ 0
+StopOnThrow=_ 0
+[DisAssemblyWindow]
+NumStates=_ 1
+State 1=_ 0
+[InstructionProfiling]
+Enabled=_ 0
+[CodeCoverage]
+Enabled=_ 0
+[StackPlugin]
+Enabled=1
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnHow=0
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Disassemble mode]
+mode=0
+[Breakpoints]
+Bp0=_ "STD_CODE" "{G:\K60\Kinetis512\kinetis-sc\src\projects\gpio\gpio_k60.c}.291.6@1" 0 0 0 0 "" 0 "" 0
+Bp1=_ "STD_CODE" "{G:\K60\Kinetis512\kinetis-sc\src\projects\gpio\gpio_k60.c}.137.2@1" 0 0 0 0 "" 0 "" 0
+Bp2=_ "STD_CODE" "{F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\gpio\gpio_k60.c}.396.9@1" 1 0 0 0 "" 0 "" 0
+Count=3
+[Aliases]
+A0=_ "G:\K60\Kinetis512\kinetis-sc\src\cpu\crt0.s" ""
+Count=1
+SuppressDialog=1

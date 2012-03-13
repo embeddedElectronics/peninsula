@@ -1,0 +1,289 @@
+###############################################################################
+#                                                                             #
+# IAR ELF Linker V6.10.1.52143/W32 for ARM              04/Mar/2012  17:42:46 #
+# Copyright 2007-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Output file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLAS #
+#                    H_512KB_PFLASH\Exe\tsi_k60_tower.out                     #
+#    Map file     =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLAS #
+#                    H_512KB_PFLASH\List\tsi_k60_tower.map                    #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLA #
+#                    SH_512KB_PFLASH\Obj\alloc.o" "F:\My                      #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\arm_cm4.o" "F:\My                           #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\assert.o" "F:\My                            #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\crt0.o" "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\io.o" "F:\My Works\K60\Kinetis512\kinetis-s #
+#                    c\build\iar\tsi\FLASH_512KB_PFLASH\Obj\main.o" "F:\My    #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\mcg.o" "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\FLASH_512KB_PFLASH\Obj\memtest.o"       #
+#                    "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLA #
+#                    SH_512KB_PFLASH\Obj\misc.o" "F:\My                       #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\printf.o" "F:\My                            #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\queue.o" "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\start.o" "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\startup.o" "F:\My                           #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\stdlib.o" "F:\My                            #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\sysinit.o" "F:\My                           #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\tsi.o" "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\FLASH_512KB_PFLASH\Obj\uart.o" "F:\My   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\uif.o" "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\FLASH_512KB_PFLASH\Obj\vectors.o"       #
+#                    "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLA #
+#                    SH_512KB_PFLASH\Obj\wdog.o" -o "F:\My                    #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Exe\tsi_k60_tower.out" --map "F:\My             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\List\tsi_k60_tower.map" --config "F:\My         #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\config  #
+#                    files\512KB_Pflash.icf" --semihosting --entry            #
+#                    __iar_program_start                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+*******************************************************************************
+*** RUNTIME MODEL ATTRIBUTES
+***
+
+CppFlavor       = *
+__SystemLibrary = DLib
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A1":  place at 0x00000000 { ro section .intvec };
+"A2":  place at 0x00000410 { ro section .noinit };
+"P1":  place in [from 0x00000000 to 0x00080000] { ro, block CodeRelocate };
+"P2":  place in [from 0x1fff0410 to 0x20010000] {
+          rw, block CodeRelocateRam, block CSTACK, block HEAP };
+
+  Section              Kind        Address    Size  Object
+  -------              ----        -------    ----  ------
+"A1":                                        0x410
+  .intvec              const    0x00000000   0x410  vectors.o [1]
+                              - 0x00000410   0x410
+
+"A2":                                         0x3c
+  .noinit              ro code  0x00000410    0x3c  crt0.o [1]
+                              - 0x0000044c    0x3c
+
+"P1":                                       0x170c
+  .text                ro code  0x0000044c   0x818  start.o [1]
+  .text                ro code  0x00000c64    0x38  wdog.o [1]
+  .text                ro code  0x00000c9c    0x9c  startup.o [1]
+  .text                ro code  0x00000d38    0xc4  sysinit.o [1]
+  .text                ro code  0x00000dfc   0x4c4  printf.o [1]
+  .text                ro code  0x000012c0    0x38  main.o [1]
+  .text                ro code  0x000012f8    0xf0  arm_cm4.o [1]
+  Veneer               ro code  0x000013e8     0x8  - Linker created -
+  .text                ro code  0x000013f0   0x114  mcg.o [1]
+  .text                ro code  0x00001504    0xf2  uart.o [1]
+  .text                ro code  0x000015f6    0x1a  stdlib.o [1]
+  .text                ro code  0x00001610   0x330  tsi.o [1]
+  .text                ro code  0x00001940    0x80  misc.o [1]
+  CodeRelocate                  0x000019c0    0x4c  <Block>
+    Initializer bytes  ro data  0x000019c0    0x4c  <for CodeRelocateRam-1>
+  .text                ro code  0x00001a0c    0x48  vectors.o [1]
+  .data_init                    0x00001a54    0x40  <Block>
+    Initializer bytes  ro data  0x00001a54    0x40  <for .data-1>
+  .text                ro code  0x00001a94    0x2c  data_init3.o [4]
+  .text                ro code  0x00001ac0    0x22  zero_init3.o [4]
+  .iar.init_table      const    0x00001ae4    0x10  - Linker created -
+  .text                ro code  0x00001af4    0x16  cmain.o [4]
+  .text                ro code  0x00001b0a     0x4  low_level_init.o [3]
+  .text                ro code  0x00001b0e     0x8  exit.o [3]
+  .text                ro code  0x00001b18     0xa  cexit.o [4]
+  .text                ro code  0x00001b24    0x14  exit.o [5]
+  .text                ro code  0x00001b38    0x14  io.o [1]
+  .text                ro code  0x00001b4c     0xc  cstartup_M.o [4]
+                              - 0x00001b58  0x170c
+
+"P2", part 1 of 2:                            0x8c
+  CodeRelocateRam               0x1fff0410    0x4c  <Block>
+    CodeRelocateRam-1           0x1fff0410    0x4c  <Init block>
+      .textrw          inited   0x1fff0410    0x4c  mcg.o [1]
+  .data                         0x1fff045c    0x40  <Block>
+    .data-1                     0x1fff045c    0x40  <Init block>
+      .data            inited   0x1fff045c    0x40  tsi.o [1]
+                              - 0x1fff049c    0x8c
+
+"P2", part 2 of 2:                            0x50
+  .bss                          0x1fff049c    0x50  <Block>
+    .bss               zero     0x1fff049c     0x4  sysinit.o [1]
+    .bss               zero     0x1fff04a0     0x4  sysinit.o [1]
+    .bss               zero     0x1fff04a4     0x4  sysinit.o [1]
+    .bss               zero     0x1fff04a8    0x20  tsi.o [1]
+    .bss               zero     0x1fff04c8    0x20  tsi.o [1]
+    .bss               zero     0x1fff04e8     0x2  tsi.o [1]
+                              - 0x1fff04ec    0x50
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+          Address     Size
+          -------     ----
+Zero (__iar_zero_init3)
+    1 destination range, total size 0x4e:
+          0x1fff049c  0x4e
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module            ro code  rw code  ro data  rw data
+    ------            -------  -------  -------  -------
+F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512KB_PFLASH\Obj: [1]
+    arm_cm4.o             240
+    crt0.o                 60
+    io.o                   20
+    main.o                 56
+    mcg.o                 276       76       76
+    misc.o                128
+    printf.o            1 220
+    start.o             2 072
+    startup.o             156
+    stdlib.o               26
+    sysinit.o             196                         12
+    tsi.o                 816                64      130
+    uart.o                242
+    vectors.o              72             1 040
+    wdog.o                 56
+    ----------------------------------------------------
+    Total:              5 636       76    1 180      142
+
+command line: [2]
+    ----------------------------------------------------
+    Total:
+
+dl7M_tln.a: [3]
+    exit.o                  8
+    low_level_init.o        4
+    ----------------------------------------------------
+    Total:                 12
+
+rt7M_tl.a: [4]
+    cexit.o                10
+    cmain.o                22
+    cstartup_M.o           12
+    data_init3.o           44
+    zero_init3.o           34
+    ----------------------------------------------------
+    Total:                122
+
+shb_l.a: [5]
+    exit.o                 20
+    ----------------------------------------------------
+    Total:                 20
+
+    Gaps                    4                 2        2
+    Linker created          8                16
+--------------------------------------------------------
+    Grand Total:        5 802       76    1 198      144
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                      Address   Size  Type      Object
+-----                      -------   ----  ----      ------
+.bss$$Base              0x1fff049c          --   Gb  - Linker created -
+.bss$$Limit             0x1fff04ec          --   Gb  - Linker created -
+.data$$Base             0x1fff045c          --   Gb  - Linker created -
+.data$$Limit            0x1fff049c          --   Gb  - Linker created -
+.data_init$$Base        0x00001a54          --   Gb  - Linker created -
+.data_init$$Limit       0x00001a94          --   Gb  - Linker created -
+?main                   0x00001af5         Code  Gb  cmain.o [4]
+CodeRelocate$$Base      0x000019c0          --   Gb  - Linker created -
+CodeRelocate$$Limit     0x00001a0c          --   Gb  - Linker created -
+CodeRelocateRam$$Base   0x1fff0410          --   Gb  - Linker created -
+CodeRelocateRam$$Limit  0x1fff045c          --   Gb  - Linker created -
+GPIO_Init               0x0000194b   0x3a  Code  Gb  misc.o [1]
+LED_Dir_Out             0x0000198d    0xe  Code  Gb  misc.o [1]
+LEDs_On                 0x00001985    0x8  Code  Gb  misc.o [1]
+Region$$Table$$Base     0x00001ae4          --   Gb  - Linker created -
+Region$$Table$$Limit    0x00001af4          --   Gb  - Linker created -
+TSI_Init                0x00001611   0x5a  Code  Gb  tsi.o [1]
+TSI_SelfCalibration     0x0000166b   0xba  Code  Gb  tsi.o [1]
+TSI_isr                 0x00001725  0x1c2  Code  Gb  tsi.o [1]
+__BOOT_STACK_ADDRESS {Abs}
+                        0x2000fff8          --   Gb  command line/config [2]
+__VECTOR_RAM {Abs}      0x1fff0000          --   Gb  command line/config [2]
+__VECTOR_TABLE {Abs}    0x00000000          --   Gb  command line/config [2]
+__cmain                 0x00001af5         Code  Gb  cmain.o [4]
+__exit                  0x00001b25   0x14  Code  Gb  exit.o [5]
+__iar_data_init3        0x00001a95   0x2c  Code  Gb  data_init3.o [4]
+__iar_program_start     0x00001b4d         Code  Gb  cstartup_M.o [4]
+__iar_zero_init3        0x00001ac1   0x22  Code  Gb  zero_init3.o [4]
+__low_level_init        0x00001b0b    0x4  Code  Gb  low_level_init.o [3]
+__startup               0x00000411         Code  Gb  crt0.o [1]
+__vector_table          0x00000000  0x410  Data  Gb  vectors.o [1]
+_call_main              0x00001b01         Code  Gb  cmain.o [4]
+_exit                   0x00001b19         Code  Gb  cexit.o [4]
+_main                   0x00001b07         Code  Gb  cmain.o [4]
+common_startup          0x00000c9d   0x9c  Code  Gb  startup.o [1]
+core_clk_khz            0x1fff049c    0x4  Data  Gb  sysinit.o [1]
+core_clk_mhz            0x1fff04a0    0x4  Data  Gb  sysinit.o [1]
+cpu_identify            0x00000511  0x254  Code  Gb  start.o [1]
+default_isr             0x00001a0d   0x12  Code  Gb  vectors.o [1]
+delay                   0x00001941    0xa  Code  Gb  misc.o [1]
+enable_irq              0x000012ff   0x94  Code  Gb  arm_cm4.o [1]
+exit                    0x00001b0f    0x8  Code  Gb  exit.o [3]
+fb_clk_init             0x00000db5   0x16  Code  Gb  sysinit.o [1]
+flash_identify          0x00000765   0xa0  Code  Gb  start.o [1]
+g16ElectrodeBaseline    0x1fff04c8   0x20  Data  Gb  tsi.o [1]
+g16ElectrodeTouch       0x1fff04a8   0x20  Data  Gb  tsi.o [1]
+g32DebounceCounter      0x1fff045c   0x40  Data  Gb  tsi.o [1]
+main                    0x000012c1   0x38  Code  Gb  main.o [1]
+out_char                0x00001b39    0xe  Code  Gb  io.o [1]
+periph_clk_khz          0x1fff04a4    0x4  Data  Gb  sysinit.o [1]
+pll_init                0x000013f1   0xf6  Code  Gb  mcg.o [1]
+printf                  0x0000129f   0x1e  Code  Gb  printf.o [1]
+printk                  0x00000ed5  0x3ca  Code  Gb  printf.o [1]
+printk_mknumstr         0x00000e29   0x70  Code  Lc  printf.o [1]
+printk_pad_space        0x00000eb7   0x1e  Code  Lc  printf.o [1]
+printk_pad_zero         0x00000e99   0x1e  Code  Lc  printf.o [1]
+printk_putc             0x00000dfd   0x2c  Code  Lc  printf.o [1]
+set_sys_dividers        0x1fff0411   0x4c  Code  Gb  mcg.o [1]
+start                   0x0000044d   0xc0  Code  Gb  start.o [1]
+strlen                  0x000015f7   0x1a  Code  Gb  stdlib.o [1]
+sysinit                 0x00000d39   0x66  Code  Gb  sysinit.o [1]
+trace_clk_init          0x00000d9f   0x16  Code  Gb  sysinit.o [1]
+uart_init               0x00001505   0xcc  Code  Gb  uart.o [1]
+uart_putchar            0x000015ed    0xa  Code  Gb  uart.o [1]
+wdog_disable            0x00000c65   0x16  Code  Gb  wdog.o [1]
+wdog_unlock             0x00000c7d   0x16  Code  Gb  wdog.o [1]
+write_vtor              0x000012f9    0x6  Code  Gb  arm_cm4.o [1]
+
+
+[1] = F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512KB_PFLASH\Obj
+[2] = command line
+[3] = dl7M_tln.a
+[4] = rt7M_tl.a
+[5] = shb_l.a
+
+  5 802 bytes of readonly  code memory
+     76 bytes of readwrite code memory
+  1 198 bytes of readonly  data memory
+    144 bytes of readwrite data memory
+
+Errors: none
+Warnings: none

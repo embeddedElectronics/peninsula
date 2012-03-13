@@ -1,0 +1,291 @@
+###############################################################################
+#                                                                             #
+#                                                       06/Mar/2012  12:19:29 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\common\queue.c #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\common\queue. #
+#                    c" -D IAR -D TWR_K60N512 -lCN "F:\My                     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_64KB\ #
+#                    List\" -lB "F:\My Works\K60\Kinetis512\kinetis-sc\build\ #
+#                    iar\gpio\RAM_64KB\List\" -o "F:\My                       #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_64KB\ #
+#                    Obj\" --no_cse --no_unroll --no_inline --no_code_motion  #
+#                    --no_tbaa --no_clustering --no_scheduling --debug        #
+#                    --endian=little --cpu=Cortex-M4 -e --fpu=None            #
+#                    --dlib_config "D:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 6.0 Evaluation\arm\INC\c\DLib_Config_Normal.h" #
+#                     -I "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpi #
+#                    o\..\..\..\src\projects\gpio\" -I "F:\My                 #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\b #
+#                    uild\iar\gpio\..\..\..\src\cpu\" -I "F:\My               #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\cpu\headers\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\uart\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\mcg\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\wdog\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-s #
+#                    c\build\iar\gpio\..\" -Ol --use_c++_inline               #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _64KB\List\queue.lst                                     #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _64KB\Obj\queue.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\common\queue.c
+      1          /*
+      2           * File:    queue.c
+      3           * Purpose: Implement a first in, first out linked list
+      4           *
+      5           * Notes:   
+      6           */
+      7          
+      8          #include "common.h"
+      9          #include "queue.h"
+     10          
+     11          /********************************************************************/
+     12          /* 
+     13           * Initialize the specified queue to an empty state
+     14           * 
+     15           * Parameters:
+     16           *  q   Pointer to queue structure
+     17           */
+
+   \                                 In section .text, align 2, keep-with-next
+     18          void
+     19          queue_init(QUEUE *q)
+     20          {
+     21              q->head = NULL;
+   \                     queue_init:
+   \   00000000   0021               MOVS     R1,#+0
+   \   00000002   0160               STR      R1,[R0, #+0]
+     22          }
+   \   00000004   7047               BX       LR               ;; return
+     23          /********************************************************************/
+     24          /* 
+     25           * Check for an empty queue
+     26           *
+     27           * Parameters:
+     28           *  q       Pointer to queue structure
+     29           * 
+     30           * Return Value:
+     31           *  1 if Queue is empty
+     32           *  0 otherwise
+     33           */
+
+   \                                 In section .text, align 2, keep-with-next
+     34          int
+     35          queue_isempty(QUEUE *q)
+     36          {
+     37              return (q->head == NULL);
+   \                     queue_isempty:
+   \   00000000   0068               LDR      R0,[R0, #+0]
+   \   00000002   0028               CMP      R0,#+0
+   \   00000004   01D1               BNE.N    ??queue_isempty_0
+   \   00000006   0120               MOVS     R0,#+1
+   \   00000008   00E0               B.N      ??queue_isempty_1
+   \                     ??queue_isempty_0:
+   \   0000000A   0020               MOVS     R0,#+0
+   \                     ??queue_isempty_1:
+   \   0000000C   C0B2               UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \   0000000E   7047               BX       LR               ;; return
+     38          }
+     39          /********************************************************************/
+     40          /* 
+     41           * Add an item to the end of the queue 
+     42           *
+     43           * Parameters:
+     44           *  q       Pointer to queue structure
+     45           *  node    New node to add to the queue
+     46           */
+
+   \                                 In section .text, align 2, keep-with-next
+     47          void
+     48          queue_add(QUEUE *q, QNODE *node)
+     49          {
+   \                     queue_add:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+   \   00000002   0400               MOVS     R4,R0
+   \   00000004   0D00               MOVS     R5,R1
+     50              if (queue_isempty(q))
+   \   00000006   2000               MOVS     R0,R4
+   \   00000008   ........           BL       queue_isempty
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   02D0               BEQ.N    ??queue_add_0
+     51              {
+     52                  q->head = q->tail = node;
+   \   00000010   6560               STR      R5,[R4, #+4]
+   \   00000012   2560               STR      R5,[R4, #+0]
+   \   00000014   02E0               B.N      ??queue_add_1
+     53              }
+     54              else
+     55              {
+     56                  q->tail->next = node;
+   \                     ??queue_add_0:
+   \   00000016   6068               LDR      R0,[R4, #+4]
+   \   00000018   0560               STR      R5,[R0, #+0]
+     57                  q->tail = node;
+   \   0000001A   6560               STR      R5,[R4, #+4]
+     58              }
+     59              
+     60              node->next = NULL;
+   \                     ??queue_add_1:
+   \   0000001C   0020               MOVS     R0,#+0
+   \   0000001E   2860               STR      R0,[R5, #+0]
+     61          }
+   \   00000020   31BD               POP      {R0,R4,R5,PC}    ;; return
+     62          
+     63          /********************************************************************/
+     64          /* 
+     65           * Remove and return first (oldest) entry from the specified queue 
+     66           *
+     67           * Parameters:
+     68           *  q       Pointer to queue structure
+     69           *
+     70           * Return Value:
+     71           *  Node at head of queue - NULL if queue is empty
+     72           */
+
+   \                                 In section .text, align 2, keep-with-next
+     73          QNODE*
+     74          queue_remove(QUEUE *q)
+     75          {
+   \                     queue_remove:
+   \   00000000   10B5               PUSH     {R4,LR}
+   \   00000002   0400               MOVS     R4,R0
+     76              QNODE *oldest;
+     77              
+     78              if (queue_isempty(q))
+   \   00000004   2000               MOVS     R0,R4
+   \   00000006   ........           BL       queue_isempty
+   \   0000000A   0028               CMP      R0,#+0
+   \   0000000C   01D0               BEQ.N    ??queue_remove_0
+     79                  return NULL;
+   \   0000000E   0020               MOVS     R0,#+0
+   \   00000010   02E0               B.N      ??queue_remove_1
+     80              
+     81              oldest = q->head;
+   \                     ??queue_remove_0:
+   \   00000012   2068               LDR      R0,[R4, #+0]
+     82              q->head = oldest->next;
+   \   00000014   0168               LDR      R1,[R0, #+0]
+   \   00000016   2160               STR      R1,[R4, #+0]
+     83              return oldest;
+   \                     ??queue_remove_1:
+   \   00000018   10BD               POP      {R4,PC}          ;; return
+     84          }
+     85          /********************************************************************/
+     86          /* 
+     87           * Peek into the queue and return pointer to first (oldest) entry.
+     88           * The queue is not modified
+     89           *
+     90           * Parameters:
+     91           *  q       Pointer to queue structure
+     92           *
+     93           * Return Value:
+     94           *  Node at head of queue - NULL if queue is empty
+     95           */
+
+   \                                 In section .text, align 2, keep-with-next
+     96          QNODE*
+     97          queue_peek(QUEUE *q)
+     98          {
+     99              return q->head;
+   \                     queue_peek:
+   \   00000000   0068               LDR      R0,[R0, #+0]
+   \   00000002   7047               BX       LR               ;; return
+    100          }
+    101          /********************************************************************/
+    102          /* 
+    103           * Move entire contents of one queue to the other
+    104           *
+    105           * Parameters:
+    106           *  src     Pointer to source queue
+    107           *  dst     Pointer to destination queue
+    108           */
+
+   \                                 In section .text, align 2, keep-with-next
+    109          void
+    110          queue_move(QUEUE *dst, QUEUE *src)
+    111          {
+   \                     queue_move:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+   \   00000002   0400               MOVS     R4,R0
+   \   00000004   0D00               MOVS     R5,R1
+    112              if (queue_isempty(src))
+   \   00000006   2800               MOVS     R0,R5
+   \   00000008   ........           BL       queue_isempty
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   0ED1               BNE.N    ??queue_move_0
+    113                  return;
+    114              
+    115              if (queue_isempty(dst))
+   \                     ??queue_move_1:
+   \   00000010   2000               MOVS     R0,R4
+   \   00000012   ........           BL       queue_isempty
+   \   00000016   0028               CMP      R0,#+0
+   \   00000018   02D0               BEQ.N    ??queue_move_2
+    116                  dst->head = src->head;
+   \   0000001A   2868               LDR      R0,[R5, #+0]
+   \   0000001C   2060               STR      R0,[R4, #+0]
+   \   0000001E   02E0               B.N      ??queue_move_3
+    117              else
+    118                  dst->tail->next = src->head;
+   \                     ??queue_move_2:
+   \   00000020   6068               LDR      R0,[R4, #+4]
+   \   00000022   2968               LDR      R1,[R5, #+0]
+   \   00000024   0160               STR      R1,[R0, #+0]
+    119          
+    120              dst->tail = src->tail;
+   \                     ??queue_move_3:
+   \   00000026   6868               LDR      R0,[R5, #+4]
+   \   00000028   6060               STR      R0,[R4, #+4]
+    121              src->head = NULL;
+   \   0000002A   0020               MOVS     R0,#+0
+   \   0000002C   2860               STR      R0,[R5, #+0]
+    122              return;
+   \                     ??queue_move_0:
+   \   0000002E   31BD               POP      {R0,R4,R5,PC}    ;; return
+    123          }
+    124          /********************************************************************/
+
+   Maximum stack usage in bytes:
+
+     Function      .cstack
+     --------      -------
+     queue_add         16
+     queue_init         0
+     queue_isempty      0
+     queue_move        16
+     queue_peek         0
+     queue_remove       8
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     queue_init        6
+     queue_isempty    16
+     queue_add        34
+     queue_remove     26
+     queue_peek        4
+     queue_move       48
+
+ 
+ 134 bytes in section .text
+ 
+ 134 bytes of CODE memory
+
+Errors: none
+Warnings: none

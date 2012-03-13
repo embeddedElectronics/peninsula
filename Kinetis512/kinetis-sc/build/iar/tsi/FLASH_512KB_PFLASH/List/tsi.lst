@@ -1,0 +1,751 @@
+###############################################################################
+#                                                                             #
+#                                                       04/Mar/2012  17:42:41 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\t #
+#                    si.c                                                     #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\ #
+#                    tsi.c" -D IAR -D TWR_K60N512 -lCN "F:\My                 #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\List\" -lB "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\FLASH_512KB_PFLASH\List\" -o "F:\My     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLASH_512K #
+#                    B_PFLASH\Obj\" --no_cse --no_unroll --no_inline          #
+#                    --no_code_motion --no_tbaa --no_clustering               #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M4  #
+#                    -e --fpu=None --dlib_config "D:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0                           #
+#                    Evaluation\arm\INC\c\DLib_Config_Normal.h" -I "F:\My     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\projects\tsi\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\bu #
+#                    ild\iar\tsi\..\..\..\src\cpu\" -I "F:\My                 #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\cpu\headers\" -I "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\..\..\..\src\drivers\uart\" -I "F:\My   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\drivers\mcg\" -I "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\..\..\..\src\drivers\wdog\" -I "F:\My   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-sc #
+#                    \build\iar\tsi\..\" -Ol --use_c++_inline                 #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLAS #
+#                    H_512KB_PFLASH\List\tsi.lst                              #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\FLAS #
+#                    H_512KB_PFLASH\Obj\tsi.o                                 #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\tsi.c
+      1          
+      2          #include "TSI.h"
+      3          
+      4          extern uint32 __VECTOR_RAM[];
+      5          
+
+   \                                 In section .bss, align 4
+      6          uint16  g16ElectrodeTouch[16] = {0};
+   \                     g16ElectrodeTouch:
+   \   00000000                      DS8 32
+
+   \                                 In section .bss, align 4
+      7          uint16  g16ElectrodeBaseline[16] = {0};
+   \                     g16ElectrodeBaseline:
+   \   00000000                      DS8 32
+      8          
+
+   \                                 In section .data, align 4
+      9          uint32  g32DebounceCounter[16] = {DBOUNCE_COUNTS};
+   \                     g32DebounceCounter:
+   \   00000000   10000000           DC32 16
+   \   00000004   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+   \              00000000    
+   \   00000014   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+   \              00000000    
+   \   00000024   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+   \              00000000    
+   \   00000034   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+     10          
+     11          /********************************************************************************
+     12           *   TSI_Init: Initializes TSI module
+     13           * Notes:
+     14           *    -
+     15           ********************************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+     16          void TSI_Init(void)
+     17          {
+   \                     TSI_Init:
+   \   00000000   80B5               PUSH     {R7,LR}
+     18            SIM_SCGC5 |= (SIM_SCGC5_TSI_MASK); //Turn on clock to TSI module
+   \   00000002   ....               LDR.N    R0,??DataTable2  ;; 0x40048038
+   \   00000004   0068               LDR      R0,[R0, #+0]
+   \   00000006   50F02000           ORRS     R0,R0,#0x20
+   \   0000000A   ....               LDR.N    R1,??DataTable2  ;; 0x40048038
+   \   0000000C   0860               STR      R0,[R1, #+0]
+     19          
+     20          #ifdef TWR_K60N512
+     21            PORTA_PCR4 = PORT_PCR_MUX(0);      //Enable ALT0 for portA4
+   \   0000000E   ....               LDR.N    R0,??DataTable2_1  ;; 0x40049010
+   \   00000010   0021               MOVS     R1,#+0
+   \   00000012   0160               STR      R1,[R0, #+0]
+     22            PORTB_PCR2 = PORT_PCR_MUX(0);      //Enable ALT0 for portB2
+   \   00000014   ....               LDR.N    R0,??DataTable2_2  ;; 0x4004a008
+   \   00000016   0021               MOVS     R1,#+0
+   \   00000018   0160               STR      R1,[R0, #+0]
+     23            PORTB_PCR3 = PORT_PCR_MUX(0);      //Enable ALT0 for portB3
+   \   0000001A   ....               LDR.N    R0,??DataTable2_3  ;; 0x4004a00c
+   \   0000001C   0021               MOVS     R1,#+0
+   \   0000001E   0160               STR      R1,[R0, #+0]
+     24            PORTB_PCR16 = PORT_PCR_MUX(0);      //Enable ALT0 for portB16
+   \   00000020   ....               LDR.N    R0,??DataTable2_4  ;; 0x4004a040
+   \   00000022   0021               MOVS     R1,#+0
+   \   00000024   0160               STR      R1,[R0, #+0]
+     25          
+     26          #else
+     27            PORTB_PCR16 = PORT_PCR_MUX(0);      //Enable ALT0 for portB16
+     28            PORTB_PCR17 = PORT_PCR_MUX(0);      //Enable ALT0 for portB17
+     29            PORTB_PCR18 = PORT_PCR_MUX(0);      //Enable ALT0 for portB18
+     30            PORTB_PCR19 = PORT_PCR_MUX(0);      //Enable ALT0 for portB19
+     31          
+     32          #endif
+     33          
+     34            TSI0_GENCS |= ((TSI_GENCS_NSCN(10))|(TSI_GENCS_PS(3)));
+   \   00000026   ....               LDR.N    R0,??DataTable2_5  ;; 0x40045000
+   \   00000028   0068               LDR      R0,[R0, #+0]
+   \   0000002A   50F4A600           ORRS     R0,R0,#0x530000
+   \   0000002E   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   00000030   0860               STR      R0,[R1, #+0]
+     35            TSI0_SCANC |= ((TSI_SCANC_EXTCHRG(3))|(TSI_SCANC_REFCHRG(31))|(TSI_SCANC_DELVOL(7))|(TSI_SCANC_SMOD(0))|(TSI_SCANC_AMPSC(0)));
+   \   00000032   ....               LDR.N    R0,??DataTable2_6  ;; 0x40045004
+   \   00000034   0068               LDR      R0,[R0, #+0]
+   \   00000036   ....               LDR.N    R1,??DataTable2_7  ;; 0xf81f0000
+   \   00000038   0843               ORRS     R0,R1,R0
+   \   0000003A   ....               LDR.N    R1,??DataTable2_6  ;; 0x40045004
+   \   0000003C   0860               STR      R0,[R1, #+0]
+     36          
+     37            ELECTRODE_ENABLE_REG = ELECTRODE0_EN_MASK|ELECTRODE1_EN_MASK|ELECTRODE2_EN_MASK|ELECTRODE3_EN_MASK;
+   \   0000003E   ....               LDR.N    R0,??DataTable2_8  ;; 0x40045008
+   \   00000040   4FF46871           MOV      R1,#+928
+   \   00000044   0160               STR      R1,[R0, #+0]
+     38          
+     39            TSI0_GENCS |= (TSI_GENCS_TSIEN_MASK);  //Enables TSI
+   \   00000046   ....               LDR.N    R0,??DataTable2_5  ;; 0x40045000
+   \   00000048   0068               LDR      R0,[R0, #+0]
+   \   0000004A   50F08000           ORRS     R0,R0,#0x80
+   \   0000004E   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   00000050   0860               STR      R0,[R1, #+0]
+     40          
+     41            /* Init TSI interrupts */
+     42            enable_irq(83);  //TSI Vector is 99. IRQ# is 99-16=83
+   \   00000052   5320               MOVS     R0,#+83
+   \   00000054   ........           BL       enable_irq
+     43            /***********************/
+     44          
+     45          }
+   \   00000058   01BD               POP      {R0,PC}          ;; return
+     46          
+     47          /********************************************************************************
+     48           *   TSI_SelfCalibration: Simple auto calibration version
+     49           * Notes:
+     50           *    - Very simple, only sums a prefixed amount to the current baseline
+     51           ********************************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+     52          void TSI_SelfCalibration(void)
+     53          {
+   \                     TSI_SelfCalibration:
+   \   00000000   80B5               PUSH     {R7,LR}
+     54            TSI0_GENCS |= TSI_GENCS_SWTS_MASK;
+   \   00000002   ....               LDR.N    R0,??DataTable2_5  ;; 0x40045000
+   \   00000004   0068               LDR      R0,[R0, #+0]
+   \   00000006   4FF48071           MOV      R1,#+256
+   \   0000000A   0843               ORRS     R0,R1,R0
+   \   0000000C   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   0000000E   0860               STR      R0,[R1, #+0]
+     55          
+     56            while(!TSI0_GENCS&TSI_GENCS_EOSF_MASK){};
+   \   00000010   ....               LDR.N    R0,??DataTable2_5  ;; 0x40045000
+   \   00000012   0068               LDR      R0,[R0, #+0]
+   \   00000014   0028               CMP      R0,#+0
+   \   00000016   01D1               BNE.N    ??TSI_SelfCalibration_0
+   \   00000018   0120               MOVS     R0,#+1
+   \   0000001A   00E0               B.N      ??TSI_SelfCalibration_1
+   \                     ??TSI_SelfCalibration_0:
+   \   0000001C   0020               MOVS     R0,#+0
+     57          
+     58            delay(25000);
+   \                     ??TSI_SelfCalibration_1:
+   \   0000001E   46F2A810           MOVW     R0,#+25000
+   \   00000022   ........           BL       delay
+     59          
+     60            g16ElectrodeBaseline[ELECTRODE0] = ELECTRODE0_COUNT;
+   \   00000026   ....               LDR.N    R0,??DataTable2_9  ;; 0x40045108
+   \   00000028   0068               LDR      R0,[R0, #+0]
+   \   0000002A   000C               LSRS     R0,R0,#+16
+   \   0000002C   ....               LDR.N    R1,??DataTable2_10
+   \   0000002E   0880               STRH     R0,[R1, #+0]
+     61            ELECTRODE0_OVERRUN = (uint32)((g16ElectrodeBaseline[ELECTRODE0]+ELECTRODE0_OVRRUN));
+   \   00000030   ....               LDR.N    R0,??DataTable2_10
+   \   00000032   0088               LDRH     R0,[R0, #+0]
+   \   00000034   10F57040           ADDS     R0,R0,#+61440
+   \   00000038   ....               LDR.N    R1,??DataTable2_11  ;; 0x40045134
+   \   0000003A   0860               STR      R0,[R1, #+0]
+     62            g16ElectrodeTouch[ELECTRODE0] = g16ElectrodeBaseline[ELECTRODE0] + ELECTRODE0_TOUCH;
+   \   0000003C   ....               LDR.N    R0,??DataTable2_10
+   \   0000003E   0088               LDRH     R0,[R0, #+0]
+   \   00000040   00F20020           ADDW     R0,R0,#+512
+   \   00000044   ....               LDR.N    R1,??DataTable2_12
+   \   00000046   0880               STRH     R0,[R1, #+0]
+     63          
+     64            g16ElectrodeBaseline[ELECTRODE1] = ELECTRODE1_COUNT;
+   \   00000048   ....               LDR.N    R0,??DataTable2_10
+   \   0000004A   ....               LDR.N    R1,??DataTable2_13  ;; 0x4004510c
+   \   0000004C   0968               LDR      R1,[R1, #+0]
+   \   0000004E   090C               LSRS     R1,R1,#+16
+   \   00000050   4180               STRH     R1,[R0, #+2]
+     65            ELECTRODE1_OVERRUN = (uint32)((g16ElectrodeBaseline[ELECTRODE1]+ELECTRODE1_OVRRUN));
+   \   00000052   ....               LDR.N    R0,??DataTable2_10
+   \   00000054   4088               LDRH     R0,[R0, #+2]
+   \   00000056   10F57040           ADDS     R0,R0,#+61440
+   \   0000005A   ....               LDR.N    R1,??DataTable2_14  ;; 0x4004513c
+   \   0000005C   0860               STR      R0,[R1, #+0]
+     66            g16ElectrodeTouch[ELECTRODE1] = g16ElectrodeBaseline[ELECTRODE1] + ELECTRODE1_TOUCH;
+   \   0000005E   ....               LDR.N    R0,??DataTable2_10
+   \   00000060   4088               LDRH     R0,[R0, #+2]
+   \   00000062   00F20020           ADDW     R0,R0,#+512
+   \   00000066   ....               LDR.N    R1,??DataTable2_12
+   \   00000068   4880               STRH     R0,[R1, #+2]
+     67          
+     68            g16ElectrodeBaseline[ELECTRODE2] = ELECTRODE2_COUNT;
+   \   0000006A   ....               LDR.N    R0,??DataTable2_10
+   \   0000006C   ....               LDR.N    R1,??DataTable2_15  ;; 0x40045110
+   \   0000006E   0968               LDR      R1,[R1, #+0]
+   \   00000070   8180               STRH     R1,[R0, #+4]
+     69            ELECTRODE2_OVERRUN = (uint32)((g16ElectrodeBaseline[ELECTRODE2]+ELECTRODE2_OVRRUN));
+   \   00000072   ....               LDR.N    R0,??DataTable2_10
+   \   00000074   8088               LDRH     R0,[R0, #+4]
+   \   00000076   10F57040           ADDS     R0,R0,#+61440
+   \   0000007A   ....               LDR.N    R1,??DataTable2_16  ;; 0x40045140
+   \   0000007C   0860               STR      R0,[R1, #+0]
+     70            g16ElectrodeTouch[ELECTRODE2] = g16ElectrodeBaseline[ELECTRODE2] + ELECTRODE2_TOUCH;
+   \   0000007E   ....               LDR.N    R0,??DataTable2_10
+   \   00000080   8088               LDRH     R0,[R0, #+4]
+   \   00000082   00F20020           ADDW     R0,R0,#+512
+   \   00000086   ....               LDR.N    R1,??DataTable2_12
+   \   00000088   8880               STRH     R0,[R1, #+4]
+     71          
+     72            g16ElectrodeBaseline[ELECTRODE3] = ELECTRODE3_COUNT;
+   \   0000008A   ....               LDR.N    R0,??DataTable2_10
+   \   0000008C   ....               LDR.N    R1,??DataTable2_15  ;; 0x40045110
+   \   0000008E   0968               LDR      R1,[R1, #+0]
+   \   00000090   090C               LSRS     R1,R1,#+16
+   \   00000092   C180               STRH     R1,[R0, #+6]
+     73            ELECTRODE3_OVERRUN = (uint32)((g16ElectrodeBaseline[ELECTRODE3]+ELECTRODE3_OVRRUN));
+   \   00000094   ....               LDR.N    R0,??DataTable2_10
+   \   00000096   C088               LDRH     R0,[R0, #+6]
+   \   00000098   10F57040           ADDS     R0,R0,#+61440
+   \   0000009C   ....               LDR.N    R1,??DataTable2_17  ;; 0x40045144
+   \   0000009E   0860               STR      R0,[R1, #+0]
+     74            g16ElectrodeTouch[ELECTRODE3] = g16ElectrodeBaseline[ELECTRODE3] + ELECTRODE3_TOUCH;
+   \   000000A0   ....               LDR.N    R0,??DataTable2_10
+   \   000000A2   C088               LDRH     R0,[R0, #+6]
+   \   000000A4   00F20020           ADDW     R0,R0,#+512
+   \   000000A8   ....               LDR.N    R1,??DataTable2_12
+   \   000000AA   C880               STRH     R0,[R1, #+6]
+     75          
+     76            DISABLE_TSI;
+   \   000000AC   ....               LDR.N    R0,??DataTable2_5  ;; 0x40045000
+   \   000000AE   0068               LDR      R0,[R0, #+0]
+   \   000000B0   30F08000           BICS     R0,R0,#0x80
+   \   000000B4   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   000000B6   0860               STR      R0,[R1, #+0]
+     77          
+     78          }
+   \   000000B8   01BD               POP      {R0,PC}          ;; return
+     79          
+     80          /********************************************************************************
+     81           *   TSI_isr: TSI interrupt subroutine
+     82           * Notes:
+     83           *    -
+     84           ********************************************************************************/
+     85          
+
+   \                                 In section .text, align 2, keep-with-next
+     86          void TSI_isr(void)
+     87          {
+     88            static uint16 TouchEvent = 0;
+     89            uint16 lValidTouch = 0;
+   \                     TSI_isr:
+   \   00000000   0020               MOVS     R0,#+0
+     90            uint16 l16Counter;
+     91          
+     92            TSI0_GENCS |= TSI_GENCS_OUTRGF_MASK;
+   \   00000002   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   00000004   0968               LDR      R1,[R1, #+0]
+   \   00000006   51F48041           ORRS     R1,R1,#0x4000
+   \   0000000A   ....               LDR.N    R2,??DataTable2_5  ;; 0x40045000
+   \   0000000C   1160               STR      R1,[R2, #+0]
+     93            TSI0_GENCS |= TSI_GENCS_EOSF_MASK;
+   \   0000000E   ....               LDR.N    R1,??DataTable2_5  ;; 0x40045000
+   \   00000010   0968               LDR      R1,[R1, #+0]
+   \   00000012   51F40041           ORRS     R1,R1,#0x8000
+   \   00000016   ....               LDR.N    R2,??DataTable2_5  ;; 0x40045000
+   \   00000018   1160               STR      R1,[R2, #+0]
+     94          
+     95          
+     96            /* Process electrode 0 */
+     97            l16Counter = ELECTRODE0_COUNT;
+   \   0000001A   ....               LDR.N    R1,??DataTable2_9  ;; 0x40045108
+   \   0000001C   0968               LDR      R1,[R1, #+0]
+   \   0000001E   090C               LSRS     R1,R1,#+16
+     98            if(l16Counter>g16ElectrodeTouch[ELECTRODE0]) //See if detected a touch
+   \   00000020   ....               LDR.N    R2,??DataTable2_12
+   \   00000022   1288               LDRH     R2,[R2, #+0]
+   \   00000024   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   00000026   8A42               CMP      R2,R1
+   \   00000028   18D2               BCS.N    ??TSI_isr_0
+     99            {
+    100              TouchEvent |= (1<<ELECTRODE0); //Set touch event variable
+   \   0000002A   ....               LDR.N    R1,??DataTable2_18
+   \   0000002C   0988               LDRH     R1,[R1, #+0]
+   \   0000002E   51F00101           ORRS     R1,R1,#0x1
+   \   00000032   ....               LDR.N    R2,??DataTable2_18
+   \   00000034   1180               STRH     R1,[R2, #+0]
+    101              g32DebounceCounter[ELECTRODE0]--; //Decrement debounce counter
+   \   00000036   ....               LDR.N    R1,??DataTable2_19
+   \   00000038   0968               LDR      R1,[R1, #+0]
+   \   0000003A   491E               SUBS     R1,R1,#+1
+   \   0000003C   ....               LDR.N    R2,??DataTable2_19
+   \   0000003E   1160               STR      R1,[R2, #+0]
+    102              if(!g32DebounceCounter[ELECTRODE0]) //If debounce counter reaches 0....
+   \   00000040   ....               LDR.N    R1,??DataTable2_19
+   \   00000042   0968               LDR      R1,[R1, #+0]
+   \   00000044   0029               CMP      R1,#+0
+   \   00000046   13D1               BNE.N    ??TSI_isr_1
+    103              {
+    104                lValidTouch |= ((1<<ELECTRODE0)); //Signal that a valid touch has been detected
+   \   00000048   50F00100           ORRS     R0,R0,#0x1
+    105                TouchEvent &= ~(1<<ELECTRODE0);  //Clear touch event variable
+   \   0000004C   ....               LDR.N    R1,??DataTable2_18
+   \   0000004E   0988               LDRH     R1,[R1, #+0]
+   \   00000050   4FF6FE72           MOVW     R2,#+65534
+   \   00000054   1140               ANDS     R1,R2,R1
+   \   00000056   ....               LDR.N    R2,??DataTable2_18
+   \   00000058   1180               STRH     R1,[R2, #+0]
+   \   0000005A   09E0               B.N      ??TSI_isr_1
+    106              }
+    107            }
+    108            else
+    109            {
+    110              TouchEvent &= ~(1<<ELECTRODE0); //Clear touch event variable
+   \                     ??TSI_isr_0:
+   \   0000005C   ....               LDR.N    R1,??DataTable2_18
+   \   0000005E   0988               LDRH     R1,[R1, #+0]
+   \   00000060   4FF6FE72           MOVW     R2,#+65534
+   \   00000064   1140               ANDS     R1,R2,R1
+   \   00000066   ....               LDR.N    R2,??DataTable2_18
+   \   00000068   1180               STRH     R1,[R2, #+0]
+    111              g32DebounceCounter[ELECTRODE0] = DBOUNCE_COUNTS; //Reset debounce counter
+   \   0000006A   ....               LDR.N    R1,??DataTable2_19
+   \   0000006C   1022               MOVS     R2,#+16
+   \   0000006E   0A60               STR      R2,[R1, #+0]
+    112            }
+    113            /***********************/
+    114          
+    115            /* Process electrode 1 */
+    116            l16Counter = ELECTRODE1_COUNT;
+   \                     ??TSI_isr_1:
+   \   00000070   ....               LDR.N    R1,??DataTable2_13  ;; 0x4004510c
+   \   00000072   0968               LDR      R1,[R1, #+0]
+   \   00000074   090C               LSRS     R1,R1,#+16
+    117            if(l16Counter>g16ElectrodeTouch[ELECTRODE1])
+   \   00000076   ....               LDR.N    R2,??DataTable2_12
+   \   00000078   5288               LDRH     R2,[R2, #+2]
+   \   0000007A   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   0000007C   8A42               CMP      R2,R1
+   \   0000007E   18D2               BCS.N    ??TSI_isr_2
+    118            {
+    119              TouchEvent |= (1<<ELECTRODE1);
+   \   00000080   ....               LDR.N    R1,??DataTable2_18
+   \   00000082   0988               LDRH     R1,[R1, #+0]
+   \   00000084   51F00201           ORRS     R1,R1,#0x2
+   \   00000088   ....               LDR.N    R2,??DataTable2_18
+   \   0000008A   1180               STRH     R1,[R2, #+0]
+    120              g32DebounceCounter[ELECTRODE1]--;
+   \   0000008C   ....               LDR.N    R1,??DataTable2_19
+   \   0000008E   4968               LDR      R1,[R1, #+4]
+   \   00000090   491E               SUBS     R1,R1,#+1
+   \   00000092   ....               LDR.N    R2,??DataTable2_19
+   \   00000094   5160               STR      R1,[R2, #+4]
+    121              if(!g32DebounceCounter[ELECTRODE1])
+   \   00000096   ....               LDR.N    R1,??DataTable2_19
+   \   00000098   4968               LDR      R1,[R1, #+4]
+   \   0000009A   0029               CMP      R1,#+0
+   \   0000009C   13D1               BNE.N    ??TSI_isr_3
+    122              {
+    123                lValidTouch |= ((1<<ELECTRODE1));
+   \   0000009E   50F00200           ORRS     R0,R0,#0x2
+    124                TouchEvent &= ~(1<<ELECTRODE1);
+   \   000000A2   ....               LDR.N    R1,??DataTable2_18
+   \   000000A4   0988               LDRH     R1,[R1, #+0]
+   \   000000A6   4FF6FD72           MOVW     R2,#+65533
+   \   000000AA   1140               ANDS     R1,R2,R1
+   \   000000AC   ....               LDR.N    R2,??DataTable2_18
+   \   000000AE   1180               STRH     R1,[R2, #+0]
+   \   000000B0   09E0               B.N      ??TSI_isr_3
+    125              }
+    126            }
+    127            else
+    128            {
+    129              TouchEvent &= ~(1<<ELECTRODE1);
+   \                     ??TSI_isr_2:
+   \   000000B2   ....               LDR.N    R1,??DataTable2_18
+   \   000000B4   0988               LDRH     R1,[R1, #+0]
+   \   000000B6   4FF6FD72           MOVW     R2,#+65533
+   \   000000BA   1140               ANDS     R1,R2,R1
+   \   000000BC   ....               LDR.N    R2,??DataTable2_18
+   \   000000BE   1180               STRH     R1,[R2, #+0]
+    130              g32DebounceCounter[ELECTRODE1] = DBOUNCE_COUNTS;
+   \   000000C0   ....               LDR.N    R1,??DataTable2_19
+   \   000000C2   1022               MOVS     R2,#+16
+   \   000000C4   4A60               STR      R2,[R1, #+4]
+    131            }
+    132            /***********************/
+    133          
+    134            /* Process electrode 2 */
+    135            l16Counter = ELECTRODE2_COUNT;
+   \                     ??TSI_isr_3:
+   \   000000C6   ....               LDR.N    R1,??DataTable2_15  ;; 0x40045110
+   \   000000C8   0968               LDR      R1,[R1, #+0]
+    136            if(l16Counter>g16ElectrodeTouch[ELECTRODE2])
+   \   000000CA   ....               LDR.N    R2,??DataTable2_12
+   \   000000CC   9288               LDRH     R2,[R2, #+4]
+   \   000000CE   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   000000D0   8A42               CMP      R2,R1
+   \   000000D2   18D2               BCS.N    ??TSI_isr_4
+    137            {
+    138              TouchEvent |= (1<<ELECTRODE2);
+   \   000000D4   ....               LDR.N    R1,??DataTable2_18
+   \   000000D6   0988               LDRH     R1,[R1, #+0]
+   \   000000D8   51F00401           ORRS     R1,R1,#0x4
+   \   000000DC   ....               LDR.N    R2,??DataTable2_18
+   \   000000DE   1180               STRH     R1,[R2, #+0]
+    139              g32DebounceCounter[ELECTRODE2]--;
+   \   000000E0   ....               LDR.N    R1,??DataTable2_19
+   \   000000E2   8968               LDR      R1,[R1, #+8]
+   \   000000E4   491E               SUBS     R1,R1,#+1
+   \   000000E6   ....               LDR.N    R2,??DataTable2_19
+   \   000000E8   9160               STR      R1,[R2, #+8]
+    140              if(!g32DebounceCounter[ELECTRODE2])
+   \   000000EA   ....               LDR.N    R1,??DataTable2_19
+   \   000000EC   8968               LDR      R1,[R1, #+8]
+   \   000000EE   0029               CMP      R1,#+0
+   \   000000F0   13D1               BNE.N    ??TSI_isr_5
+    141              {
+    142                lValidTouch |= ((1<<ELECTRODE2));
+   \   000000F2   50F00400           ORRS     R0,R0,#0x4
+    143                TouchEvent &= ~(1<<ELECTRODE2);
+   \   000000F6   ....               LDR.N    R1,??DataTable2_18
+   \   000000F8   0988               LDRH     R1,[R1, #+0]
+   \   000000FA   4FF6FB72           MOVW     R2,#+65531
+   \   000000FE   1140               ANDS     R1,R2,R1
+   \   00000100   ....               LDR.N    R2,??DataTable2_18
+   \   00000102   1180               STRH     R1,[R2, #+0]
+   \   00000104   09E0               B.N      ??TSI_isr_5
+    144              }
+    145            }
+    146            else
+    147            {
+    148              TouchEvent &= ~(1<<ELECTRODE2);
+   \                     ??TSI_isr_4:
+   \   00000106   ....               LDR.N    R1,??DataTable2_18
+   \   00000108   0988               LDRH     R1,[R1, #+0]
+   \   0000010A   4FF6FB72           MOVW     R2,#+65531
+   \   0000010E   1140               ANDS     R1,R2,R1
+   \   00000110   ....               LDR.N    R2,??DataTable2_18
+   \   00000112   1180               STRH     R1,[R2, #+0]
+    149              g32DebounceCounter[ELECTRODE2] = DBOUNCE_COUNTS;
+   \   00000114   ....               LDR.N    R1,??DataTable2_19
+   \   00000116   1022               MOVS     R2,#+16
+   \   00000118   8A60               STR      R2,[R1, #+8]
+    150            }
+    151            /***********************/
+    152          
+    153            /* Process electrode 3 */
+    154            l16Counter = ELECTRODE3_COUNT;
+   \                     ??TSI_isr_5:
+   \   0000011A   ....               LDR.N    R1,??DataTable2_15  ;; 0x40045110
+   \   0000011C   0968               LDR      R1,[R1, #+0]
+   \   0000011E   090C               LSRS     R1,R1,#+16
+    155            if(l16Counter>g16ElectrodeTouch[ELECTRODE3])
+   \   00000120   ....               LDR.N    R2,??DataTable2_12
+   \   00000122   D288               LDRH     R2,[R2, #+6]
+   \   00000124   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   00000126   8A42               CMP      R2,R1
+   \   00000128   18D2               BCS.N    ??TSI_isr_6
+    156            {
+    157              TouchEvent |= (1<<ELECTRODE3);
+   \   0000012A   ....               LDR.N    R1,??DataTable2_18
+   \   0000012C   0988               LDRH     R1,[R1, #+0]
+   \   0000012E   51F00801           ORRS     R1,R1,#0x8
+   \   00000132   ....               LDR.N    R2,??DataTable2_18
+   \   00000134   1180               STRH     R1,[R2, #+0]
+    158              g32DebounceCounter[ELECTRODE3]--;
+   \   00000136   ....               LDR.N    R1,??DataTable2_19
+   \   00000138   C968               LDR      R1,[R1, #+12]
+   \   0000013A   491E               SUBS     R1,R1,#+1
+   \   0000013C   ....               LDR.N    R2,??DataTable2_19
+   \   0000013E   D160               STR      R1,[R2, #+12]
+    159              if(!g32DebounceCounter[ELECTRODE3])
+   \   00000140   ....               LDR.N    R1,??DataTable2_19
+   \   00000142   C968               LDR      R1,[R1, #+12]
+   \   00000144   0029               CMP      R1,#+0
+   \   00000146   13D1               BNE.N    ??TSI_isr_7
+    160              {
+    161                lValidTouch |= ((1<<ELECTRODE3));
+   \   00000148   50F00800           ORRS     R0,R0,#0x8
+    162                TouchEvent &= ~(1<<ELECTRODE3);
+   \   0000014C   ....               LDR.N    R1,??DataTable2_18
+   \   0000014E   0988               LDRH     R1,[R1, #+0]
+   \   00000150   4FF6F772           MOVW     R2,#+65527
+   \   00000154   1140               ANDS     R1,R2,R1
+   \   00000156   ....               LDR.N    R2,??DataTable2_18
+   \   00000158   1180               STRH     R1,[R2, #+0]
+   \   0000015A   09E0               B.N      ??TSI_isr_7
+    163              }
+    164            }
+    165            else
+    166            {
+    167              TouchEvent &= ~(1<<ELECTRODE3);
+   \                     ??TSI_isr_6:
+   \   0000015C   ....               LDR.N    R1,??DataTable2_18
+   \   0000015E   0988               LDRH     R1,[R1, #+0]
+   \   00000160   4FF6F772           MOVW     R2,#+65527
+   \   00000164   1140               ANDS     R1,R2,R1
+   \   00000166   ....               LDR.N    R2,??DataTable2_18
+   \   00000168   1180               STRH     R1,[R2, #+0]
+    168              g32DebounceCounter[ELECTRODE3] = DBOUNCE_COUNTS;
+   \   0000016A   ....               LDR.N    R1,??DataTable2_19
+   \   0000016C   1022               MOVS     R2,#+16
+   \   0000016E   CA60               STR      R2,[R1, #+12]
+    169            }
+    170            /***********************/
+    171          
+    172            if(lValidTouch&((1<<ELECTRODE0))) //If detected a valid touch...
+   \                     ??TSI_isr_7:
+   \   00000170   C107               LSLS     R1,R0,#+31
+   \   00000172   06D5               BPL.N    ??TSI_isr_8
+    173            {
+    174              LED0_TOGGLE; //Toggle LED
+   \   00000174   ....               LDR.N    R1,??DataTable2_20  ;; 0x400ff00c
+   \   00000176   4FF40062           MOV      R2,#+2048
+   \   0000017A   0A60               STR      R2,[R1, #+0]
+    175              lValidTouch &= ~((1<<ELECTRODE0)); //Clear valid touch
+   \   0000017C   4FF6FE71           MOVW     R1,#+65534
+   \   00000180   0840               ANDS     R0,R1,R0
+    176            }
+    177            if(lValidTouch&((1<<ELECTRODE1)))
+   \                     ??TSI_isr_8:
+   \   00000182   8107               LSLS     R1,R0,#+30
+   \   00000184   06D5               BPL.N    ??TSI_isr_9
+    178            {
+    179              LED1_TOGGLE;
+   \   00000186   ....               LDR.N    R1,??DataTable2_20  ;; 0x400ff00c
+   \   00000188   5FF00052           MOVS     R2,#+536870912
+   \   0000018C   0A60               STR      R2,[R1, #+0]
+    180              lValidTouch &= ~((1<<ELECTRODE1));
+   \   0000018E   4FF6FD71           MOVW     R1,#+65533
+   \   00000192   0840               ANDS     R0,R1,R0
+    181            }
+    182            if(lValidTouch&((1<<ELECTRODE2)))
+   \                     ??TSI_isr_9:
+   \   00000194   4107               LSLS     R1,R0,#+29
+   \   00000196   06D5               BPL.N    ??TSI_isr_10
+    183            {
+    184              LED2_TOGGLE;
+   \   00000198   ....               LDR.N    R1,??DataTable2_20  ;; 0x400ff00c
+   \   0000019A   5FF08052           MOVS     R2,#+268435456
+   \   0000019E   0A60               STR      R2,[R1, #+0]
+    185              lValidTouch &= ~((1<<ELECTRODE2));
+   \   000001A0   4FF6FB71           MOVW     R1,#+65531
+   \   000001A4   0840               ANDS     R0,R1,R0
+    186            }
+    187            if(lValidTouch&((1<<ELECTRODE3)))
+   \                     ??TSI_isr_10:
+   \   000001A6   0107               LSLS     R1,R0,#+28
+   \   000001A8   06D5               BPL.N    ??TSI_isr_11
+    188            {
+    189              LED3_TOGGLE;
+   \   000001AA   ....               LDR.N    R1,??DataTable2_20  ;; 0x400ff00c
+   \   000001AC   4FF48062           MOV      R2,#+1024
+   \   000001B0   0A60               STR      R2,[R1, #+0]
+    190              lValidTouch &= ~((1<<ELECTRODE3));
+   \   000001B2   4FF6F771           MOVW     R1,#+65527
+   \   000001B6   0840               ANDS     R0,R1,R0
+    191            }
+    192          
+    193            TSI0_STATUS = 0xFFFFFFFF;
+   \                     ??TSI_isr_11:
+   \   000001B8   ....               LDR.N    R0,??DataTable2_21  ;; 0x4004500c
+   \   000001BA   5FF0FF31           MOVS     R1,#-1
+   \   000001BE   0160               STR      R1,[R0, #+0]
+    194          }
+   \   000001C0   7047               BX       LR               ;; return
+
+   \                                 In section .bss, align 2
+   \                     ??TouchEvent:
+   \   00000000                      DS8 2
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2:
+   \   00000000   38800440           DC32     0x40048038
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_1:
+   \   00000000   10900440           DC32     0x40049010
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_2:
+   \   00000000   08A00440           DC32     0x4004a008
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_3:
+   \   00000000   0CA00440           DC32     0x4004a00c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_4:
+   \   00000000   40A00440           DC32     0x4004a040
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_5:
+   \   00000000   00500440           DC32     0x40045000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_6:
+   \   00000000   04500440           DC32     0x40045004
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_7:
+   \   00000000   00001FF8           DC32     0xf81f0000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_8:
+   \   00000000   08500440           DC32     0x40045008
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_9:
+   \   00000000   08510440           DC32     0x40045108
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_10:
+   \   00000000   ........           DC32     g16ElectrodeBaseline
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_11:
+   \   00000000   34510440           DC32     0x40045134
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_12:
+   \   00000000   ........           DC32     g16ElectrodeTouch
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_13:
+   \   00000000   0C510440           DC32     0x4004510c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_14:
+   \   00000000   3C510440           DC32     0x4004513c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_15:
+   \   00000000   10510440           DC32     0x40045110
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_16:
+   \   00000000   40510440           DC32     0x40045140
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_17:
+   \   00000000   44510440           DC32     0x40045144
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_18:
+   \   00000000   ........           DC32     ??TouchEvent
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_19:
+   \   00000000   ........           DC32     g32DebounceCounter
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_20:
+   \   00000000   0CF00F40           DC32     0x400ff00c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_21:
+   \   00000000   0C500440           DC32     0x4004500c
+    195          
+
+   Maximum stack usage in bytes:
+
+     Function            .cstack
+     --------            -------
+     TSI_Init                 8
+     TSI_SelfCalibration      8
+     TSI_isr                  0
+
+
+   Section sizes:
+
+     Function/Label       Bytes
+     --------------       -----
+     g16ElectrodeTouch      32
+     g16ElectrodeBaseline   32
+     g32DebounceCounter     64
+     TSI_Init               90
+     TSI_SelfCalibration   186
+     TSI_isr               450
+     TouchEvent              2
+     ??DataTable2            4
+     ??DataTable2_1          4
+     ??DataTable2_2          4
+     ??DataTable2_3          4
+     ??DataTable2_4          4
+     ??DataTable2_5          4
+     ??DataTable2_6          4
+     ??DataTable2_7          4
+     ??DataTable2_8          4
+     ??DataTable2_9          4
+     ??DataTable2_10         4
+     ??DataTable2_11         4
+     ??DataTable2_12         4
+     ??DataTable2_13         4
+     ??DataTable2_14         4
+     ??DataTable2_15         4
+     ??DataTable2_16         4
+     ??DataTable2_17         4
+     ??DataTable2_18         4
+     ??DataTable2_19         4
+     ??DataTable2_20         4
+     ??DataTable2_21         4
+
+ 
+  66 bytes in section .bss
+  64 bytes in section .data
+ 814 bytes in section .text
+ 
+ 814 bytes of CODE memory
+ 130 bytes of DATA memory
+
+Errors: none
+Warnings: none
