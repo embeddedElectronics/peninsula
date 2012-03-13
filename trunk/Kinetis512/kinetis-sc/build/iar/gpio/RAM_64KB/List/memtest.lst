@@ -1,0 +1,430 @@
+###############################################################################
+#                                                                             #
+#                                                       06/Mar/2012  12:19:29 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\common\memtest #
+#                    .c                                                       #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\common\memtes #
+#                    t.c" -D IAR -D TWR_K60N512 -lCN "F:\My                   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_64KB\ #
+#                    List\" -lB "F:\My Works\K60\Kinetis512\kinetis-sc\build\ #
+#                    iar\gpio\RAM_64KB\List\" -o "F:\My                       #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_64KB\ #
+#                    Obj\" --no_cse --no_unroll --no_inline --no_code_motion  #
+#                    --no_tbaa --no_clustering --no_scheduling --debug        #
+#                    --endian=little --cpu=Cortex-M4 -e --fpu=None            #
+#                    --dlib_config "D:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 6.0 Evaluation\arm\INC\c\DLib_Config_Normal.h" #
+#                     -I "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpi #
+#                    o\..\..\..\src\projects\gpio\" -I "F:\My                 #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\b #
+#                    uild\iar\gpio\..\..\..\src\cpu\" -I "F:\My               #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\cpu\headers\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\uart\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\mcg\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\wdog\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-s #
+#                    c\build\iar\gpio\..\" -Ol --use_c++_inline               #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _64KB\List\memtest.lst                                   #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _64KB\Obj\memtest.o                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\common\memtest.c
+      1          /**********************************************************************
+      2           *
+      3           * Filename:    memtest.c
+      4           * 
+      5           * Description: General-purpose memory testing functions.
+      6           *
+      7           * Notes:       This software can be easily ported to systems with
+      8           *              different data bus widths by redefining 'datum'.
+      9           *
+     10           * 
+     11           * Copyright (c) 1998 by Michael Barr.  This software is placed into
+     12           * the public domain and may be used for any purpose.  However, this
+     13           * notice must not be changed or removed and no warranty is either
+     14           * expressed or implied by its publication or distribution.
+     15           **********************************************************************/
+     16          
+     17          
+     18          #include "memtest.h"
+     19          
+     20          
+     21          /**********************************************************************
+     22           *
+     23           * Function:    memTestDataBus()
+     24           *
+     25           * Description: Test the data bus wiring in a memory region by
+     26           *              performing a walking 1's test at a fixed address
+     27           *              within that region.  The address (and hence the
+     28           *              memory region) is selected by the caller.
+     29           *
+     30           * Notes:       
+     31           *
+     32           * Returns:     0 if the test succeeds.  
+     33           *              A non-zero result is the first pattern that failed.
+     34           *
+     35           **********************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+     36          datum
+     37          memTestDataBus(volatile datum * address)
+     38          {
+     39              datum pattern;
+     40          
+     41          
+     42              /*
+     43               * Perform a walking 1's test at the given address.
+     44               */
+     45              for (pattern = 1; pattern != 0; pattern <<= 1)
+   \                     memTestDataBus:
+   \   00000000   0121               MOVS     R1,#+1
+   \   00000002   00E0               B.N      ??memTestDataBus_0
+   \                     ??memTestDataBus_1:
+   \   00000004   4900               LSLS     R1,R1,#+1
+   \                     ??memTestDataBus_0:
+   \   00000006   0029               CMP      R1,#+0
+   \   00000008   05D0               BEQ.N    ??memTestDataBus_2
+     46              {
+     47                  /*
+     48                   * Write the test pattern.
+     49                   */
+     50                  *address = pattern;
+   \   0000000A   0160               STR      R1,[R0, #+0]
+     51          
+     52                  /*
+     53                   * Read it back (immediately is okay for this test).
+     54                   */
+     55                  if (*address != pattern) 
+   \   0000000C   0268               LDR      R2,[R0, #+0]
+   \   0000000E   8A42               CMP      R2,R1
+   \   00000010   F8D0               BEQ.N    ??memTestDataBus_1
+     56                  {
+     57                      return (pattern);
+   \   00000012   0800               MOVS     R0,R1
+   \   00000014   00E0               B.N      ??memTestDataBus_3
+     58                  }
+     59              }
+     60          
+     61              return (0);
+   \                     ??memTestDataBus_2:
+   \   00000016   0020               MOVS     R0,#+0
+   \                     ??memTestDataBus_3:
+   \   00000018   7047               BX       LR               ;; return
+     62          
+     63          }   /* memTestDataBus() */
+     64          
+     65          
+     66          /**********************************************************************
+     67           *
+     68           * Function:    memTestAddressBus()
+     69           *
+     70           * Description: Test the address bus wiring in a memory region by
+     71           *              performing a walking 1's test on the relevant bits
+     72           *              of the address and checking for aliasing. This test
+     73           *              will find single-bit address failures such as stuck
+     74           *              -high, stuck-low, and shorted pins.  The base address
+     75           *              and size of the region are selected by the caller.
+     76           *
+     77           * Notes:       For best results, the selected base address should
+     78           *              have enough LSB 0's to guarantee single address bit
+     79           *              changes.  For example, to test a 64-Kbyte region, 
+     80           *              select a base address on a 64-Kbyte boundary.  Also, 
+     81           *              select the region size as a power-of-two--if at all 
+     82           *              possible.
+     83           *
+     84           * Returns:     NULL if the test succeeds.  
+     85           *              A non-zero result is the first address at which an
+     86           *              aliasing problem was uncovered.  By examining the
+     87           *              contents of memory, it may be possible to gather
+     88           *              additional information about the problem.
+     89           *
+     90           **********************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+     91          datum * 
+     92          memTestAddressBus(volatile datum * baseAddress, unsigned long nBytes)
+     93          {
+   \                     memTestAddressBus:
+   \   00000000   70B4               PUSH     {R4-R6}
+     94              unsigned long addressMask = (nBytes/sizeof(datum) - 1);
+   \   00000002   8908               LSRS     R1,R1,#+2
+   \   00000004   491E               SUBS     R1,R1,#+1
+     95              unsigned long offset;
+     96              unsigned long testOffset;
+     97          
+     98              datum pattern     = (datum) 0xAAAAAAAA;
+   \   00000006   5FF0AA34           MOVS     R4,#-1431655766
+     99              datum antipattern = (datum) 0x55555555;
+   \   0000000A   5FF05535           MOVS     R5,#+1431655765
+    100          
+    101          
+    102              /*
+    103               * Write the default pattern at each of the power-of-two offsets.
+    104               */
+    105              for (offset = 1; (offset & addressMask) != 0; offset <<= 1)
+   \   0000000E   0122               MOVS     R2,#+1
+   \   00000010   02E0               B.N      ??memTestAddressBus_0
+    106              {
+    107                  baseAddress[offset] = pattern;
+   \                     ??memTestAddressBus_1:
+   \   00000012   40F82240           STR      R4,[R0, R2, LSL #+2]
+    108              }
+   \   00000016   5200               LSLS     R2,R2,#+1
+   \                     ??memTestAddressBus_0:
+   \   00000018   0A42               TST      R2,R1
+   \   0000001A   FAD1               BNE.N    ??memTestAddressBus_1
+    109          
+    110              /* 
+    111               * Check for address bits stuck high.
+    112               */
+    113              testOffset = 0;
+   \   0000001C   0023               MOVS     R3,#+0
+    114              baseAddress[testOffset] = antipattern;
+   \   0000001E   40F82350           STR      R5,[R0, R3, LSL #+2]
+    115          
+    116              for (offset = 1; (offset & addressMask) != 0; offset <<= 1)
+   \   00000022   0122               MOVS     R2,#+1
+   \   00000024   00E0               B.N      ??memTestAddressBus_2
+   \                     ??memTestAddressBus_3:
+   \   00000026   5200               LSLS     R2,R2,#+1
+   \                     ??memTestAddressBus_2:
+   \   00000028   0A42               TST      R2,R1
+   \   0000002A   06D0               BEQ.N    ??memTestAddressBus_4
+    117              {
+    118                  if (baseAddress[offset] != pattern)
+   \   0000002C   50F82260           LDR      R6,[R0, R2, LSL #+2]
+   \   00000030   A642               CMP      R6,R4
+   \   00000032   F8D0               BEQ.N    ??memTestAddressBus_3
+    119                  {
+    120                      return ((datum *) &baseAddress[offset]);
+   \   00000034   10EB8200           ADDS     R0,R0,R2, LSL #+2
+   \   00000038   1FE0               B.N      ??memTestAddressBus_5
+    121                  }
+    122              }
+    123          
+    124              baseAddress[testOffset] = pattern;
+   \                     ??memTestAddressBus_4:
+   \   0000003A   40F82340           STR      R4,[R0, R3, LSL #+2]
+    125          
+    126              /*
+    127               * Check for address bits stuck low or shorted.
+    128               */
+    129              for (testOffset = 1; (testOffset & addressMask) != 0; testOffset <<= 1)
+   \   0000003E   0123               MOVS     R3,#+1
+   \   00000040   02E0               B.N      ??memTestAddressBus_6
+    130              {
+    131                  baseAddress[testOffset] = antipattern;
+    132          
+    133          		if (baseAddress[0] != pattern)
+    134          		{
+    135          			return ((datum *) &baseAddress[testOffset]);
+    136          		}
+    137          
+    138                  for (offset = 1; (offset & addressMask) != 0; offset <<= 1)
+    139                  {
+    140                      if ((baseAddress[offset] != pattern) && (offset != testOffset))
+    141                      {
+    142                          return ((datum *) &baseAddress[testOffset]);
+    143                      }
+    144                  }
+    145          
+    146                  baseAddress[testOffset] = pattern;
+   \                     ??memTestAddressBus_7:
+   \   00000042   40F82340           STR      R4,[R0, R3, LSL #+2]
+   \   00000046   5B00               LSLS     R3,R3,#+1
+   \                     ??memTestAddressBus_6:
+   \   00000048   0B42               TST      R3,R1
+   \   0000004A   15D0               BEQ.N    ??memTestAddressBus_8
+   \   0000004C   40F82350           STR      R5,[R0, R3, LSL #+2]
+   \   00000050   0268               LDR      R2,[R0, #+0]
+   \   00000052   A242               CMP      R2,R4
+   \   00000054   02D0               BEQ.N    ??memTestAddressBus_9
+   \   00000056   10EB8300           ADDS     R0,R0,R3, LSL #+2
+   \   0000005A   0EE0               B.N      ??memTestAddressBus_5
+   \                     ??memTestAddressBus_9:
+   \   0000005C   0122               MOVS     R2,#+1
+   \   0000005E   00E0               B.N      ??memTestAddressBus_10
+   \                     ??memTestAddressBus_11:
+   \   00000060   5200               LSLS     R2,R2,#+1
+   \                     ??memTestAddressBus_10:
+   \   00000062   0A42               TST      R2,R1
+   \   00000064   EDD0               BEQ.N    ??memTestAddressBus_7
+   \   00000066   50F82260           LDR      R6,[R0, R2, LSL #+2]
+   \   0000006A   A642               CMP      R6,R4
+   \   0000006C   F8D0               BEQ.N    ??memTestAddressBus_11
+   \   0000006E   9A42               CMP      R2,R3
+   \   00000070   F6D0               BEQ.N    ??memTestAddressBus_11
+   \   00000072   10EB8300           ADDS     R0,R0,R3, LSL #+2
+   \   00000076   00E0               B.N      ??memTestAddressBus_5
+    147              }
+    148          
+    149              return (NULL);
+   \                     ??memTestAddressBus_8:
+   \   00000078   0020               MOVS     R0,#+0
+   \                     ??memTestAddressBus_5:
+   \   0000007A   70BC               POP      {R4-R6}
+   \   0000007C   7047               BX       LR               ;; return
+    150          
+    151          }   /* memTestAddressBus() */
+    152          
+    153          
+    154          /**********************************************************************
+    155           *
+    156           * Function:    memTestDevice()
+    157           *
+    158           * Description: Test the integrity of a physical memory device by
+    159           *              performing an increment/decrement test over the
+    160           *              entire region.  In the process every storage bit 
+    161           *              in the device is tested as a zero and a one.  The
+    162           *              base address and the size of the region are
+    163           *              selected by the caller.
+    164           *
+    165           * Notes:       
+    166           *
+    167           * Returns:     NULL if the test succeeds.
+    168           *
+    169           *              A non-zero result is the first address at which an
+    170           *              incorrect value was read back.  By examining the
+    171           *              contents of memory, it may be possible to gather
+    172           *              additional information about the problem.
+    173           *
+    174           **********************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+    175          datum * 
+    176          memTestDevice(volatile datum * baseAddress, unsigned long nBytes)	
+    177          {
+   \                     memTestDevice:
+   \   00000000   30B4               PUSH     {R4,R5}
+    178              unsigned long offset;
+    179              unsigned long nWords = nBytes / sizeof(datum);
+   \   00000002   8A08               LSRS     R2,R1,#+2
+    180          
+    181              datum pattern;
+    182              datum antipattern;
+    183          
+    184          
+    185              /*
+    186               * Fill memory with a known pattern.
+    187               */
+    188              for (pattern = 1, offset = 0; offset < nWords; pattern++, offset++)
+   \   00000004   0123               MOVS     R3,#+1
+   \   00000006   0021               MOVS     R1,#+0
+   \   00000008   03E0               B.N      ??memTestDevice_0
+    189              {
+    190                  baseAddress[offset] = pattern;
+   \                     ??memTestDevice_1:
+   \   0000000A   40F82130           STR      R3,[R0, R1, LSL #+2]
+    191              }
+   \   0000000E   5B1C               ADDS     R3,R3,#+1
+   \   00000010   491C               ADDS     R1,R1,#+1
+   \                     ??memTestDevice_0:
+   \   00000012   9142               CMP      R1,R2
+   \   00000014   F9D3               BCC.N    ??memTestDevice_1
+    192          
+    193              /*
+    194               * Check each location and invert it for the second pass.
+    195               */
+    196              for (pattern = 1, offset = 0; offset < nWords; pattern++, offset++)
+   \   00000016   0123               MOVS     R3,#+1
+   \   00000018   0021               MOVS     R1,#+0
+   \   0000001A   04E0               B.N      ??memTestDevice_2
+    197              {
+    198                  if (baseAddress[offset] != pattern)
+    199                  {
+    200                      return ((datum *) &baseAddress[offset]);
+    201                  }
+    202          
+    203                  antipattern = ~pattern;
+   \                     ??memTestDevice_3:
+   \   0000001C   DC43               MVNS     R4,R3
+    204                  baseAddress[offset] = antipattern;
+   \   0000001E   40F82140           STR      R4,[R0, R1, LSL #+2]
+   \   00000022   5B1C               ADDS     R3,R3,#+1
+   \   00000024   491C               ADDS     R1,R1,#+1
+   \                     ??memTestDevice_2:
+   \   00000026   9142               CMP      R1,R2
+   \   00000028   06D2               BCS.N    ??memTestDevice_4
+   \   0000002A   50F82140           LDR      R4,[R0, R1, LSL #+2]
+   \   0000002E   9C42               CMP      R4,R3
+   \   00000030   F4D0               BEQ.N    ??memTestDevice_3
+   \   00000032   10EB8100           ADDS     R0,R0,R1, LSL #+2
+   \   00000036   0FE0               B.N      ??memTestDevice_5
+    205              }
+    206          
+    207              /*
+    208               * Check each location for the inverted pattern and zero it.
+    209               */
+    210              for (pattern = 1, offset = 0; offset < nWords; pattern++, offset++)
+   \                     ??memTestDevice_4:
+   \   00000038   0123               MOVS     R3,#+1
+   \   0000003A   0021               MOVS     R1,#+0
+   \   0000003C   01E0               B.N      ??memTestDevice_6
+   \                     ??memTestDevice_7:
+   \   0000003E   5B1C               ADDS     R3,R3,#+1
+   \   00000040   491C               ADDS     R1,R1,#+1
+   \                     ??memTestDevice_6:
+   \   00000042   9142               CMP      R1,R2
+   \   00000044   07D2               BCS.N    ??memTestDevice_8
+    211              {
+    212                  antipattern = ~pattern;
+   \   00000046   DC43               MVNS     R4,R3
+    213                  if (baseAddress[offset] != antipattern)
+   \   00000048   50F82150           LDR      R5,[R0, R1, LSL #+2]
+   \   0000004C   A542               CMP      R5,R4
+   \   0000004E   F6D0               BEQ.N    ??memTestDevice_7
+    214                  {
+    215                      return ((datum *) &baseAddress[offset]);
+   \   00000050   10EB8100           ADDS     R0,R0,R1, LSL #+2
+   \   00000054   00E0               B.N      ??memTestDevice_5
+    216                  }
+    217              }
+    218          
+    219              return (NULL);
+   \                     ??memTestDevice_8:
+   \   00000056   0020               MOVS     R0,#+0
+   \                     ??memTestDevice_5:
+   \   00000058   30BC               POP      {R4,R5}
+   \   0000005A   7047               BX       LR               ;; return
+    220          
+    221          }   /* memTestDevice() */
+
+   Maximum stack usage in bytes:
+
+     Function          .cstack
+     --------          -------
+     memTestAddressBus     12
+     memTestDataBus         0
+     memTestDevice          8
+
+
+   Section sizes:
+
+     Function/Label    Bytes
+     --------------    -----
+     memTestDataBus      26
+     memTestAddressBus  126
+     memTestDevice       92
+
+ 
+ 244 bytes in section .text
+ 
+ 244 bytes of CODE memory
+
+Errors: none
+Warnings: none

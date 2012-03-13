@@ -1,0 +1,219 @@
+###############################################################################
+#                                                                             #
+#                                                       04/Mar/2012  17:42:01 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\m #
+#                    isc.c                                                    #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\ #
+#                    misc.c" -D IAR -D TWR_K60N512 -lCN "F:\My                #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\RAM_64KB\L #
+#                    ist\" -lB "F:\My Works\K60\Kinetis512\kinetis-sc\build\i #
+#                    ar\tsi\RAM_64KB\List\" -o "F:\My                         #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\RAM_64KB\O #
+#                    bj\" --no_cse --no_unroll --no_inline --no_code_motion   #
+#                    --no_tbaa --no_clustering --no_scheduling --debug        #
+#                    --endian=little --cpu=Cortex-M4 -e --fpu=None            #
+#                    --dlib_config "D:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 6.0 Evaluation\arm\INC\c\DLib_Config_Normal.h" #
+#                     -I "F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi #
+#                    \..\..\..\src\projects\tsi\" -I "F:\My                   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\bu #
+#                    ild\iar\tsi\..\..\..\src\cpu\" -I "F:\My                 #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\cpu\headers\" -I "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\..\..\..\src\drivers\uart\" -I "F:\My   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\drivers\mcg\" -I "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\tsi\..\..\..\src\drivers\wdog\" -I "F:\My   #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\..\..\..\s #
+#                    rc\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-sc #
+#                    \build\iar\tsi\..\" -Ol --use_c++_inline                 #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\RAM_ #
+#                    64KB\List\misc.lst                                       #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\tsi\RAM_ #
+#                    64KB\Obj\misc.o                                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\projects\tsi\misc.c
+      1          #include "misc.h"
+      2          
+      3          /********************************************************************************
+      4           *   delay: delay
+      5           * Notes:
+      6           *    -
+      7           ********************************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+      8          void delay(uint32 i)
+      9          {
+     10            for(i;i;i--)  //delay
+   \                     delay:
+   \   00000000   00E0               B.N      ??delay_0
+   \                     ??delay_1:
+   \   00000002   401E               SUBS     R0,R0,#+1
+   \                     ??delay_0:
+   \   00000004   0028               CMP      R0,#+0
+   \   00000006   FCD1               BNE.N    ??delay_1
+     11            {
+     12            }
+     13          }
+   \   00000008   7047               BX       LR               ;; return
+     14          
+     15          /********************************************************************************
+     16           *   GPIO_Init: Initializes GPIO controlling LED
+     17           * Notes:
+     18           *    -
+     19           ********************************************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+     20          void GPIO_Init(void)
+     21          {
+   \                     GPIO_Init:
+   \   00000000   80B5               PUSH     {R7,LR}
+     22            ENABLE_GPIO_CLOCKS;
+   \   00000002   ....               LDR.N    R0,??DataTable2  ;; 0x40048038
+   \   00000004   0068               LDR      R0,[R0, #+0]
+   \   00000006   4FF40071           MOV      R1,#+512
+   \   0000000A   0843               ORRS     R0,R1,R0
+   \   0000000C   ....               LDR.N    R1,??DataTable2  ;; 0x40048038
+   \   0000000E   0860               STR      R0,[R1, #+0]
+     23          
+     24            LED0_EN;
+   \   00000010   ....               LDR.N    R0,??DataTable2_1  ;; 0x4004902c
+   \   00000012   4FF48071           MOV      R1,#+256
+   \   00000016   0160               STR      R1,[R0, #+0]
+     25            LED1_EN;
+   \   00000018   ....               LDR.N    R0,??DataTable2_2  ;; 0x40049074
+   \   0000001A   4FF48071           MOV      R1,#+256
+   \   0000001E   0160               STR      R1,[R0, #+0]
+     26            LED2_EN;
+   \   00000020   ....               LDR.N    R0,??DataTable2_3  ;; 0x40049070
+   \   00000022   4FF48071           MOV      R1,#+256
+   \   00000026   0160               STR      R1,[R0, #+0]
+     27            LED3_EN;
+   \   00000028   ....               LDR.N    R0,??DataTable2_4  ;; 0x40049028
+   \   0000002A   4FF48071           MOV      R1,#+256
+   \   0000002E   0160               STR      R1,[R0, #+0]
+     28          
+     29            LEDs_On();
+   \   00000030   ........           BL       LEDs_On
+     30            LED_Dir_Out();
+   \   00000034   ........           BL       LED_Dir_Out
+     31          }
+   \   00000038   01BD               POP      {R0,PC}          ;; return
+     32          
+
+   \                                 In section .text, align 2, keep-with-next
+     33          void LEDs_On(void)
+     34          {
+     35          #ifdef CPU_MK60N512VMD100
+     36            GPIOA_PDDR = (1<<10)|(1<<11)|(1<<28)|(1<<29);
+   \                     LEDs_On:
+   \   00000000   ....               LDR.N    R0,??DataTable2_5  ;; 0x400ff014
+   \   00000002   ....               LDR.N    R1,??DataTable2_6  ;; 0x30000c00
+   \   00000004   0160               STR      R1,[R0, #+0]
+     37          #else
+     38            GPIOB_PDDR = (1<<11);
+     39            GPIOC_PDDR = ((1<<7)|(1<<8)|(1<<9));
+     40          #endif
+     41          }
+   \   00000006   7047               BX       LR               ;; return
+     42          
+
+   \                                 In section .text, align 2, keep-with-next
+     43          void LED_Dir_Out(void)
+     44          {
+     45          #ifdef CPU_MK60N512VMD100
+     46            GPIOA_PDOR &= ~((1<<10)|(1<<11)|(1<<28)|(1<<29));
+   \                     LED_Dir_Out:
+   \   00000000   ....               LDR.N    R0,??DataTable2_7  ;; 0x400ff000
+   \   00000002   0068               LDR      R0,[R0, #+0]
+   \   00000004   ....               LDR.N    R1,??DataTable2_8  ;; 0xcffff3ff
+   \   00000006   0840               ANDS     R0,R1,R0
+   \   00000008   ....               LDR.N    R1,??DataTable2_7  ;; 0x400ff000
+   \   0000000A   0860               STR      R0,[R1, #+0]
+     47          #else
+     48            GPIOB_PDOR &= ~(1<<11);
+     49            GPIOC_PDOR &= ~((1<<7)|(1<<8)|(1<<9));
+     50          #endif
+     51          }
+   \   0000000C   7047               BX       LR               ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2:
+   \   00000000   38800440           DC32     0x40048038
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_1:
+   \   00000000   2C900440           DC32     0x4004902c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_2:
+   \   00000000   74900440           DC32     0x40049074
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_3:
+   \   00000000   70900440           DC32     0x40049070
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_4:
+   \   00000000   28900440           DC32     0x40049028
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_5:
+   \   00000000   14F00F40           DC32     0x400ff014
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_6:
+   \   00000000   000C0030           DC32     0x30000c00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_7:
+   \   00000000   00F00F40           DC32     0x400ff000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable2_8:
+   \   00000000   FFF3FFCF           DC32     0xcffff3ff
+
+   Maximum stack usage in bytes:
+
+     Function    .cstack
+     --------    -------
+     GPIO_Init        8
+     LED_Dir_Out      0
+     LEDs_On          0
+     delay            0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     delay            10
+     GPIO_Init        58
+     LEDs_On           8
+     LED_Dir_Out      14
+     ??DataTable2      4
+     ??DataTable2_1    4
+     ??DataTable2_2    4
+     ??DataTable2_3    4
+     ??DataTable2_4    4
+     ??DataTable2_5    4
+     ??DataTable2_6    4
+     ??DataTable2_7    4
+     ??DataTable2_8    4
+
+ 
+ 126 bytes in section .text
+ 
+ 126 bytes of CODE memory
+
+Errors: none
+Warnings: 1

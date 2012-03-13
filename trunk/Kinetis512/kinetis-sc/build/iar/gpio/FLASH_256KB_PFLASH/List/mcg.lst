@@ -1,0 +1,294 @@
+###############################################################################
+#                                                                             #
+#                                                       04/Mar/2012  11:32:50 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\mcg\mc #
+#                    g.c                                                      #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\mcg\m #
+#                    cg.c" -D IAR -D TWR_K60N512 -lCN "F:\My                  #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\FLASH_256 #
+#                    KB_PFLASH\List\" -lB "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\FLASH_256 #
+#                    KB_PFLASH\List\" -o "F:\My Works\K60\Kinetis512\kinetis- #
+#                    sc\build\iar\gpio\FLASH_256KB_PFLASH\Obj\" --no_cse      #
+#                    --no_unroll --no_inline --no_code_motion --no_tbaa       #
+#                    --no_clustering --no_scheduling --debug --endian=little  #
+#                    --cpu=Cortex-M4 -e --fpu=None --dlib_config "D:\Program  #
+#                    Files\IAR Systems\Embedded Workbench 6.0                 #
+#                    Evaluation\arm\INC\c\DLib_Config_Normal.h" -I "F:\My     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\projects\gpio\" -I "F:\My                            #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\b #
+#                    uild\iar\gpio\..\..\..\src\cpu\" -I "F:\My               #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\cpu\headers\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\uart\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\mcg\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\wdog\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-s #
+#                    c\build\iar\gpio\..\" -Ol --use_c++_inline               #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\FLA #
+#                    SH_256KB_PFLASH\List\mcg.lst                             #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\FLA #
+#                    SH_256KB_PFLASH\Obj\mcg.o                                #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\mcg\mcg.c
+      1          /*
+      2           * File:    mcg.c
+      3           * Purpose: Driver for enabling the PLL in 1 of 4 options
+      4           *
+      5           * Notes:
+      6           * Assumes the MCG mode is in the default FEI mode out of reset
+      7           * One of 4 clocking oprions can be selected.
+      8           * One of 16 crystal values can be used
+      9           */
+     10          
+     11          #include "common.h"
+     12          #include "mcg.h"
+     13          
+     14          extern int core_clk_khz;
+     15          extern int core_clk_mhz;
+     16          extern int periph_clk_khz;
+     17          
+     18          unsigned char pll_init(unsigned char clk_option, unsigned char crystal_val)
+     19          {
+     20            unsigned char pll_freq;
+     21          
+     22            if (clk_option > 3) {return 0;} //return 0 if one of the available options is not selected
+     23            if (crystal_val > 15) {return 1;} // return 1 if one of the available crystal options is not available
+     24          //This assumes that the MCG is in default FEI mode out of reset.
+     25          
+     26          // First move to FBE mode
+     27          #if (defined(K60_CLK) || defined(ASB817))
+     28               MCG_C2 = 0;
+     29          #else
+     30          // Enable external oscillator, RANGE=2, HGO=1, EREFS=1, LP=0, IRCS=0
+     31              MCG_C2 = MCG_C2_RANGE(2) | MCG_C2_HGO_MASK | MCG_C2_EREFS_MASK;
+     32          #endif
+     33          
+     34          // after initialization of oscillator release latched state of oscillator and GPIO
+     35              SIM_SCGC4 |= SIM_SCGC4_LLWU_MASK;
+     36              LLWU_CS |= LLWU_CS_ACKISO_MASK;
+     37            
+     38          // Select external oscilator and Reference Divider and clear IREFS to start ext osc
+     39          // CLKS=2, FRDIV=3, IREFS=0, IRCLKEN=0, IREFSTEN=0
+     40            MCG_C1 = MCG_C1_CLKS(2) | MCG_C1_FRDIV(3);
+     41          
+     42            /* if we aren't using an osc input we don't need to wait for the osc to init */
+     43          #if (!defined(K60_CLK) && !defined(ASB817))
+     44              while (!(MCG_S & MCG_S_OSCINIT_MASK)){};  // wait for oscillator to initialize
+     45          #endif
+     46          
+     47            while (MCG_S & MCG_S_IREFST_MASK){}; // wait for Reference clock Status bit to clear
+     48          
+     49            while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x2){}; // Wait for clock status bits to show clock source is ext ref clk
+     50          
+     51          // Now in FBE
+     52          
+     53          #if (defined(K60_CLK))
+     54             MCG_C5 = MCG_C5_PRDIV(0x18);
+     55          #else
+     56          // Configure PLL Ref Divider, PLLCLKEN=0, PLLSTEN=0, PRDIV=5
+     57          // The crystal frequency is used to select the PRDIV value. Only even frequency crystals are supported
+     58          // that will produce a 2MHz reference clock to the PLL.
+     59            MCG_C5 = MCG_C5_PRDIV(crystal_val); // Set PLL ref divider to match the crystal used
+     60          #endif
+     61          
+     62            // Ensure MCG_C6 is at the reset default of 0. LOLIE disabled, PLL disabled, clk monitor disabled, PLL VCO divider is clear
+     63            MCG_C6 = 0x0;
+     64          // Select the PLL VCO divider and system clock dividers depending on clocking option
+     65            switch (clk_option) {
+     66              case 0:
+     67                // Set system options dividers
+     68                //MCG=PLL, core = MCG, bus = MCG, FlexBus = MCG, Flash clock= MCG/2
+     69                set_sys_dividers(0,0,0,1);
+     70                // Set the VCO divider and enable the PLL for 50MHz, LOLIE=0, PLLS=1, CME=0, VDIV=1
+     71                MCG_C6 = MCG_C6_PLLS_MASK | MCG_C6_VDIV(1); //VDIV = 1 (x25)
+     72                pll_freq = 50;
+     73                break;
+     74             case 1:
+     75                // Set system options dividers
+     76                //MCG=PLL, core = MCG, bus = MCG/2, FlexBus = MCG/2, Flash clock= MCG/4
+     77               set_sys_dividers(0,1,1,3);
+     78                // Set the VCO divider and enable the PLL for 100MHz, LOLIE=0, PLLS=1, CME=0, VDIV=26
+     79                MCG_C6 = MCG_C6_PLLS_MASK | MCG_C6_VDIV(26); //VDIV = 26 (x50)
+     80                pll_freq = 100;
+     81                break;
+     82              case 2:
+     83                // Set system options dividers
+     84                //MCG=PLL, core = MCG, bus = MCG/2, FlexBus = MCG/2, Flash clock= MCG/4
+     85                set_sys_dividers(0,1,1,3);
+     86                // Set the VCO divider and enable the PLL for 96MHz, LOLIE=0, PLLS=1, CME=0, VDIV=24
+     87                MCG_C6 = MCG_C6_PLLS_MASK | MCG_C6_VDIV(24); //VDIV = 24 (x48)
+     88                pll_freq = 96;
+     89                break;
+     90             case 3:
+     91                // Set system options dividers
+     92                //MCG=PLL, core = MCG, bus = MCG, FlexBus = MCG, Flash clock= MCG/2
+     93                set_sys_dividers(0,0,0,1);
+     94                // Set the VCO divider and enable the PLL for 48MHz, LOLIE=0, PLLS=1, CME=0, VDIV=0
+     95                MCG_C6 = MCG_C6_PLLS_MASK; //VDIV = 0 (x24)
+     96                pll_freq = 48;
+     97                break;
+     98            }
+     99            while (!(MCG_S & MCG_S_PLLST_MASK)){}; // wait for PLL status bit to set
+    100          
+    101            while (!(MCG_S & MCG_S_LOCK_MASK)){}; // Wait for LOCK bit to set
+    102          
+    103          // Now running PBE Mode
+    104          
+    105          // Transition into PEE by setting CLKS to 0
+    106          // CLKS=0, FRDIV=3, IREFS=0, IRCLKEN=0, IREFSTEN=0
+    107            MCG_C1 &= ~MCG_C1_CLKS_MASK;
+    108          
+    109          // Wait for clock status bits to update
+    110            while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x3){};
+    111          
+    112          // Now running PEE Mode
+    113          
+    114          return pll_freq;
+    115          } //pll_init
+    116          
+    117          
+    118           /*
+    119            * This routine must be placed in RAM. It is a workaround for errata e2448.
+    120            * Flash prefetch must be disabled when the flash clock divider is changed.
+    121            * This cannot be performed while executing out of flash.
+    122            * There must be a short delay after the clock dividers are changed before prefetch
+    123            * can be re-enabled.
+    124            */
+    125          #if (defined(IAR))
+    126          	__ramfunc void set_sys_dividers(uint32 outdiv1, uint32 outdiv2, uint32 outdiv3, uint32 outdiv4)
+    127          #elif (defined(CW))
+    128          __relocate_code__ 
+    129          void set_sys_dividers(uint32 outdiv1, uint32 outdiv2, uint32 outdiv3, uint32 outdiv4)
+    130          #endif
+    131          {
+    132            uint32 temp_reg;
+    133            uint8 i;
+    134            
+    135            temp_reg = FMC_PFAPR; // store present value of FMC_PFAPR
+    136            
+    137            // set M0PFD through M7PFD to 1 to disable prefetch
+    138            FMC_PFAPR |= FMC_PFAPR_M7PFD_MASK | FMC_PFAPR_M6PFD_MASK | FMC_PFAPR_M5PFD_MASK
+    139                       | FMC_PFAPR_M4PFD_MASK | FMC_PFAPR_M3PFD_MASK | FMC_PFAPR_M2PFD_MASK
+    140                       | FMC_PFAPR_M1PFD_MASK | FMC_PFAPR_M0PFD_MASK;
+    141            
+    142            // set clock dividers to desired value  
+    143            SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(outdiv1) | SIM_CLKDIV1_OUTDIV2(outdiv2) 
+    144                        | SIM_CLKDIV1_OUTDIV3(outdiv3) | SIM_CLKDIV1_OUTDIV4(outdiv4);
+    145          
+    146            // wait for dividers to change
+    147            for (i = 0 ; i < outdiv4 ; i++)
+    148            {}
+    149            
+    150            FMC_PFAPR = temp_reg; // re-store original value of FMC_PFAPR
+    151            
+    152            return;
+    153          } // set_sys_dividers
+    154          
+    155          
+    156          /********************************************************************/
+    157          void mcg_pee_2_blpi(void)
+    158          {
+    159              uint8 temp_reg;
+    160              // Transition from PEE to BLPI: PEE -> PBE -> FBE -> FBI -> BLPI
+    161            
+    162              // Step 1: PEE -> PBE
+    163              MCG_C1 |= MCG_C1_CLKS(2);  // System clock from external reference OSC, not PLL.
+    164              while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x2){};  // Wait for clock status to update.
+    165              
+    166              // Step 2: PBE -> FBE
+    167              MCG_C6 &= ~MCG_C6_PLLS_MASK;  // Clear PLLS to select FLL, still running system from ext OSC.
+    168              while (MCG_S & MCG_S_PLLST_MASK){};  // Wait for PLL status flag to reflect FLL selected.
+    169              
+    170              // Step 3: FBE -> FBI
+    171              MCG_C2 &= ~MCG_C2_LP_MASK;  // FLL remains active in bypassed modes.
+    172              MCG_C2 |= MCG_C2_IRCS_MASK;  // Select fast (1MHz) internal reference
+    173              temp_reg = MCG_C1;
+    174              temp_reg &= ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK);
+    175              temp_reg |= (MCG_C1_CLKS(1) | MCG_C1_IREFS_MASK);  // Select internal reference (fast IREF clock @ 1MHz) as MCG clock source.
+    176              MCG_C1 = temp_reg;
+    177            
+    178              while (MCG_S & MCG_S_IREFST_MASK){};  // Wait for Reference Status bit to update.
+    179              while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x1){};  // Wait for clock status bits to update
+    180              
+    181              // Step 4: FBI -> BLPI
+    182              MCG_C1 |= MCG_C1_IREFSTEN_MASK;  // Keep internal reference clock running in STOP modes.
+    183              MCG_C2 |= MCG_C2_LP_MASK;  // FLL remains disabled in bypassed modes.
+    184              while (!(MCG_S & MCG_S_IREFST_MASK)){};  // Wait for Reference Status bit to update.
+    185              while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x1){};  // Wait for clock status bits to update.
+    186            
+    187          } // end MCG PEE to BLPI
+    188          /********************************************************************/
+    189          void mcg_blpi_2_pee(void)
+    190          {
+    191              uint8 temp_reg;
+    192              // Transition from BLPI to PEE: BLPI -> FBI -> FEI -> FBE -> PBE -> PEE
+    193            
+    194              // Step 1: BLPI -> FBI
+    195              MCG_C2 &= ~MCG_C2_LP_MASK;  // FLL remains active in bypassed modes.
+    196              while (!(MCG_S & MCG_S_IREFST_MASK)){};  // Wait for Reference Status bit to update.
+    197              while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x1){};  // Wait for clock status bits to update
+    198              
+    199              // Step 2: FBI -> FEI
+    200              MCG_C2 &= ~MCG_C2_LP_MASK;  // FLL remains active in bypassed modes.
+    201              temp_reg = MCG_C2;  // assign temporary variable of MCG_C2 contents
+    202              temp_reg &= ~MCG_C2_RANGE_MASK;  // set RANGE field location to zero
+    203              temp_reg |= (0x2 << 0x4);  // OR in new values
+    204              MCG_C2 = temp_reg;  // store new value in MCG_C2
+    205              MCG_C4 = 0x0E;  // Low-range DCO output (~10MHz bus).  FCTRIM=%0111.
+    206              MCG_C1 = 0x04;  // Select internal clock as MCG source, FRDIV=%000, internal reference selected.
+    207           
+    208              while (!(MCG_S & MCG_S_IREFST_MASK)){};   // Wait for Reference Status bit to update 
+    209              while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x0){}; // Wait for clock status bits to update
+    210              
+    211              // Handle FEI to PEE transitions using standard clock initialization routine.
+    212              core_clk_mhz = pll_init(CORE_CLK_MHZ, REF_CLK); 
+    213          
+    214              /* Use the value obtained from the pll_init function to define variables
+    215              * for the core clock in kHz and also the peripheral clock. These
+    216              * variables can be used by other functions that need awareness of the
+    217              * system frequency.
+    218              */
+    219              core_clk_khz = core_clk_mhz * 1000;
+    220              periph_clk_khz = core_clk_khz / (((SIM_CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK) >> 24)+ 1);        
+    221          } // end MCG BLPI to PEE
+    222          /********************************************************************/
+    223          
+    224          void mcg_pbe_2_pee(void)
+    225          {  
+    226            MCG_C1 &= ~MCG_C1_CLKS_MASK; // select PLL as MCG_OUT
+    227            // Wait for clock status bits to update 
+    228            while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x3){}; 
+    229          
+    230            switch (CORE_CLK_MHZ) {
+    231              case PLL50:
+    232                core_clk_khz = 50000;
+    233                break;
+    234              case PLL100:
+    235                core_clk_khz = 100000;
+    236                break;
+    237              case PLL96:
+    238                core_clk_khz = 96000;
+    239                break;  
+    240              case PLL48:
+    241                core_clk_khz = 48000;
+    242                break;  
+    243            }
+    244          }
+
+Errors: 3
+Warnings: 3

@@ -1,0 +1,355 @@
+###############################################################################
+#                                                                             #
+#                                                       04/Mar/2012  11:30:43 #
+# IAR ANSI C/C++ Compiler V6.10.1.22143/W32 EVALUATION for ARM                #
+# Copyright 1999-2010 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\uart\u #
+#                    art.c                                                    #
+#    Command line =  "F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\uart\ #
+#                    uart.c" -D IAR -D TWR_K60N512 -lCN "F:\My                #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_128KB #
+#                    \List\" -lB "F:\My Works\K60\Kinetis512\kinetis-sc\build #
+#                    \iar\gpio\RAM_128KB\List\" -o "F:\My                     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM_128KB #
+#                    \Obj\" --no_cse --no_unroll --no_inline                  #
+#                    --no_code_motion --no_tbaa --no_clustering               #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M4  #
+#                    -e --fpu=None --dlib_config "D:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0                           #
+#                    Evaluation\arm\INC\c\DLib_Config_Normal.h" -I "F:\My     #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\projects\gpio\" -I "F:\My                            #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\common\" -I "F:\My Works\K60\Kinetis512\kinetis-sc\b #
+#                    uild\iar\gpio\..\..\..\src\cpu\" -I "F:\My               #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\cpu\headers\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\uart\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\mcg\" -I "F:\My                              #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\drivers\wdog\" -I "F:\My                             #
+#                    Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\..\..\..\ #
+#                    src\platforms\" -I "F:\My Works\K60\Kinetis512\kinetis-s #
+#                    c\build\iar\gpio\..\" -Ol --use_c++_inline               #
+#    List file    =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _128KB\List\uart.lst                                     #
+#    Object file  =  F:\My Works\K60\Kinetis512\kinetis-sc\build\iar\gpio\RAM #
+#                    _128KB\Obj\uart.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\My Works\K60\Kinetis512\kinetis-sc\src\drivers\uart\uart.c
+      1          /*
+      2           * File:        uart.c
+      3           * Purpose:     Provide common UART routines for serial IO
+      4           *
+      5           * Notes:       
+      6           *              
+      7           */
+      8          
+      9          #include "common.h"
+     10          #include "uart.h"
+     11          
+     12          /********************************************************************/
+     13          /*
+     14           * Initialize the UART for 8N1 operation, interrupts disabled, and
+     15           * no hardware flow-control
+     16           *
+     17           * NOTE: Since the UARTs are pinned out in multiple locations on most
+     18           *       Kinetis devices, this driver does not enable UART pin functions.
+     19           *       The desired pins should be enabled before calling this init function.
+     20           *
+     21           * Parameters:
+     22           *  uartch      UART channel to initialize
+     23           *  sysclk      UART module Clock in kHz(used to calculate baud)
+     24           *  baud        UART baud rate
+     25           */
+
+   \                                 In section .text, align 2, keep-with-next
+     26          void uart_init (UART_MemMapPtr uartch, int sysclk, int baud)
+     27          {
+   \                     uart_init:
+   \   00000000   30B4               PUSH     {R4,R5}
+     28              register uint16 sbr, brfa;
+     29              uint8 temp;
+     30              
+     31          	/* Enable the clock to the selected UART */    
+     32              if(uartch == UART0_BASE_PTR)
+   \   00000002   ....               LDR.N    R3,??DataTable0  ;; 0x4006a000
+   \   00000004   9842               CMP      R0,R3
+   \   00000006   06D1               BNE.N    ??uart_init_0
+     33          		SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
+   \   00000008   ....               LDR.N    R3,??DataTable0_1  ;; 0x40048034
+   \   0000000A   1B68               LDR      R3,[R3, #+0]
+   \   0000000C   53F48063           ORRS     R3,R3,#0x400
+   \   00000010   ....               LDR.N    R4,??DataTable0_1  ;; 0x40048034
+   \   00000012   2360               STR      R3,[R4, #+0]
+   \   00000014   2DE0               B.N      ??uart_init_1
+     34              else
+     35              	if (uartch == UART1_BASE_PTR)
+   \                     ??uart_init_0:
+   \   00000016   ....               LDR.N    R3,??DataTable0_2  ;; 0x4006b000
+   \   00000018   9842               CMP      R0,R3
+   \   0000001A   06D1               BNE.N    ??uart_init_2
+     36          			SIM_SCGC4 |= SIM_SCGC4_UART1_MASK;
+   \   0000001C   ....               LDR.N    R3,??DataTable0_1  ;; 0x40048034
+   \   0000001E   1B68               LDR      R3,[R3, #+0]
+   \   00000020   53F40063           ORRS     R3,R3,#0x800
+   \   00000024   ....               LDR.N    R4,??DataTable0_1  ;; 0x40048034
+   \   00000026   2360               STR      R3,[R4, #+0]
+   \   00000028   23E0               B.N      ??uart_init_1
+     37              	else
+     38              		if (uartch == UART2_BASE_PTR)
+   \                     ??uart_init_2:
+   \   0000002A   ....               LDR.N    R3,??DataTable0_3  ;; 0x4006c000
+   \   0000002C   9842               CMP      R0,R3
+   \   0000002E   06D1               BNE.N    ??uart_init_3
+     39              			SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
+   \   00000030   ....               LDR.N    R3,??DataTable0_1  ;; 0x40048034
+   \   00000032   1B68               LDR      R3,[R3, #+0]
+   \   00000034   53F48053           ORRS     R3,R3,#0x1000
+   \   00000038   ....               LDR.N    R4,??DataTable0_1  ;; 0x40048034
+   \   0000003A   2360               STR      R3,[R4, #+0]
+   \   0000003C   19E0               B.N      ??uart_init_1
+     40              		else
+     41              			if(uartch == UART3_BASE_PTR)
+   \                     ??uart_init_3:
+   \   0000003E   ....               LDR.N    R3,??DataTable0_4  ;; 0x4006d000
+   \   00000040   9842               CMP      R0,R3
+   \   00000042   06D1               BNE.N    ??uart_init_4
+     42              				SIM_SCGC4 |= SIM_SCGC4_UART3_MASK;
+   \   00000044   ....               LDR.N    R3,??DataTable0_1  ;; 0x40048034
+   \   00000046   1B68               LDR      R3,[R3, #+0]
+   \   00000048   53F40053           ORRS     R3,R3,#0x2000
+   \   0000004C   ....               LDR.N    R4,??DataTable0_1  ;; 0x40048034
+   \   0000004E   2360               STR      R3,[R4, #+0]
+   \   00000050   0FE0               B.N      ??uart_init_1
+     43              			else
+     44              				if(uartch == UART4_BASE_PTR)
+   \                     ??uart_init_4:
+   \   00000052   ....               LDR.N    R3,??DataTable0_5  ;; 0x400ea000
+   \   00000054   9842               CMP      R0,R3
+   \   00000056   06D1               BNE.N    ??uart_init_5
+     45              					SIM_SCGC1 |= SIM_SCGC1_UART4_MASK;
+   \   00000058   ....               LDR.N    R3,??DataTable0_6  ;; 0x40048028
+   \   0000005A   1B68               LDR      R3,[R3, #+0]
+   \   0000005C   53F48063           ORRS     R3,R3,#0x400
+   \   00000060   ....               LDR.N    R4,??DataTable0_6  ;; 0x40048028
+   \   00000062   2360               STR      R3,[R4, #+0]
+   \   00000064   05E0               B.N      ??uart_init_1
+     46              				else
+     47              					SIM_SCGC1 |= SIM_SCGC1_UART5_MASK;
+   \                     ??uart_init_5:
+   \   00000066   ....               LDR.N    R3,??DataTable0_6  ;; 0x40048028
+   \   00000068   1B68               LDR      R3,[R3, #+0]
+   \   0000006A   53F40063           ORRS     R3,R3,#0x800
+   \   0000006E   ....               LDR.N    R4,??DataTable0_6  ;; 0x40048028
+   \   00000070   2360               STR      R3,[R4, #+0]
+     48                                          
+     49              /* Make sure that the transmitter and receiver are disabled while we 
+     50               * change settings.
+     51               */
+     52              UART_C2_REG(uartch) &= ~(UART_C2_TE_MASK
+     53          				| UART_C2_RE_MASK );
+   \                     ??uart_init_1:
+   \   00000072   C378               LDRB     R3,[R0, #+3]
+   \   00000074   13F0F303           ANDS     R3,R3,#0xF3
+   \   00000078   C370               STRB     R3,[R0, #+3]
+     54          
+     55              /* Configure the UART for 8-bit mode, no parity */
+     56              UART_C1_REG(uartch) = 0;	/* We need all default settings, so entire register is cleared */
+   \   0000007A   0023               MOVS     R3,#+0
+   \   0000007C   8370               STRB     R3,[R0, #+2]
+     57              
+     58              /* Calculate baud settings */
+     59              sbr = (uint16)((sysclk*1000)/(baud * 16));
+   \   0000007E   4FF47A73           MOV      R3,#+1000
+   \   00000082   03FB01F3           MUL      R3,R3,R1
+   \   00000086   1401               LSLS     R4,R2,#+4
+   \   00000088   93FBF4F3           SDIV     R3,R3,R4
+     60                  
+     61              /* Save off the current value of the UARTx_BDH except for the SBR field */
+     62              temp = UART_BDH_REG(uartch) & ~(UART_BDH_SBR(0x1F));
+   \   0000008C   0478               LDRB     R4,[R0, #+0]
+   \   0000008E   14F0E004           ANDS     R4,R4,#0xE0
+     63              
+     64              UART_BDH_REG(uartch) = temp |  UART_BDH_SBR(((sbr & 0x1F00) >> 8));
+   \   00000092   9BB2               UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
+   \   00000094   1D0A               LSRS     R5,R3,#+8
+   \   00000096   15F01F05           ANDS     R5,R5,#0x1F
+   \   0000009A   2C43               ORRS     R4,R5,R4
+   \   0000009C   0470               STRB     R4,[R0, #+0]
+     65              UART_BDL_REG(uartch) = (uint8)(sbr & UART_BDL_SBR_MASK);
+   \   0000009E   4370               STRB     R3,[R0, #+1]
+     66              
+     67              /* Determine if a fractional divider is needed to get closer to the baud rate */
+     68              brfa = (((sysclk*32000)/(baud * 16)) - (sbr * 32));
+   \   000000A0   4FF4FA44           MOV      R4,#+32000
+   \   000000A4   6143               MULS     R1,R4,R1
+   \   000000A6   1201               LSLS     R2,R2,#+4
+   \   000000A8   91FBF2F1           SDIV     R1,R1,R2
+   \   000000AC   9BB2               UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
+   \   000000AE   B1EB4311           SUBS     R1,R1,R3, LSL #+5
+     69              
+     70              /* Save off the current value of the UARTx_C4 register except for the BRFA field */
+     71              temp = UART_C4_REG(uartch) & ~(UART_C4_BRFA(0x1F));
+   \   000000B2   827A               LDRB     R2,[R0, #+10]
+   \   000000B4   12F0E004           ANDS     R4,R2,#0xE0
+     72              
+     73              UART_C4_REG(uartch) = temp |  UART_C4_BRFA(brfa);    
+   \   000000B8   11F01F01           ANDS     R1,R1,#0x1F
+   \   000000BC   2143               ORRS     R1,R1,R4
+   \   000000BE   8172               STRB     R1,[R0, #+10]
+     74          
+     75              /* Enable receiver and transmitter */
+     76          	UART_C2_REG(uartch) |= (UART_C2_TE_MASK
+     77          				| UART_C2_RE_MASK );
+   \   000000C0   C178               LDRB     R1,[R0, #+3]
+   \   000000C2   51F00C01           ORRS     R1,R1,#0xC
+   \   000000C6   C170               STRB     R1,[R0, #+3]
+     78          }
+   \   000000C8   30BC               POP      {R4,R5}
+   \   000000CA   7047               BX       LR               ;; return
+     79          /********************************************************************/
+     80          /*
+     81           * Wait for a character to be received on the specified UART
+     82           *
+     83           * Parameters:
+     84           *  channel      UART channel to read from
+     85           *
+     86           * Return Values:
+     87           *  the received character
+     88           */
+
+   \                                 In section .text, align 2, keep-with-next
+     89          char uart_getchar (UART_MemMapPtr channel)
+     90          {
+     91              /* Wait until character has been received */
+     92              while (!(UART_S1_REG(channel) & UART_S1_RDRF_MASK));
+   \                     uart_getchar:
+   \                     ??uart_getchar_0:
+   \   00000000   0179               LDRB     R1,[R0, #+4]
+   \   00000002   8906               LSLS     R1,R1,#+26
+   \   00000004   FCD5               BPL.N    ??uart_getchar_0
+     93              
+     94              /* Return the 8-bit data from the receiver */
+     95              return UART_D_REG(channel);
+   \   00000006   C079               LDRB     R0,[R0, #+7]
+   \   00000008   7047               BX       LR               ;; return
+     96          }
+     97          /********************************************************************/
+     98          /*
+     99           * Wait for space in the UART Tx FIFO and then send a character
+    100           *
+    101           * Parameters:
+    102           *  channel      UART channel to send to
+    103           *  ch			 character to send
+    104           */ 
+
+   \                                 In section .text, align 2, keep-with-next
+    105          void uart_putchar (UART_MemMapPtr channel, char ch)
+    106          {
+    107              /* Wait until space is available in the FIFO */
+    108              while(!(UART_S1_REG(channel) & UART_S1_TDRE_MASK));
+   \                     uart_putchar:
+   \                     ??uart_putchar_0:
+   \   00000000   0279               LDRB     R2,[R0, #+4]
+   \   00000002   1206               LSLS     R2,R2,#+24
+   \   00000004   FCD5               BPL.N    ??uart_putchar_0
+    109              
+    110              /* Send the character */
+    111              UART_D_REG(channel) = (uint8)ch;
+   \   00000006   C171               STRB     R1,[R0, #+7]
+    112           }
+   \   00000008   7047               BX       LR               ;; return
+    113          /********************************************************************/
+    114          /*
+    115           * Check to see if a character has been received
+    116           *
+    117           * Parameters:
+    118           *  channel      UART channel to check for a character
+    119           *
+    120           * Return values:
+    121           *  0       No character received
+    122           *  1       Character has been received
+    123           */
+
+   \                                 In section .text, align 2, keep-with-next
+    124          int uart_getchar_present (UART_MemMapPtr channel)
+    125          {
+    126              return (UART_S1_REG(channel) & UART_S1_RDRF_MASK);
+   \                     uart_getchar_present:
+   \   00000000   0079               LDRB     R0,[R0, #+4]
+   \   00000002   10F02000           ANDS     R0,R0,#0x20
+   \   00000006   7047               BX       LR               ;; return
+    127          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0:
+   \   00000000   00A00640           DC32     0x4006a000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_1:
+   \   00000000   34800440           DC32     0x40048034
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_2:
+   \   00000000   00B00640           DC32     0x4006b000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_3:
+   \   00000000   00C00640           DC32     0x4006c000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_4:
+   \   00000000   00D00640           DC32     0x4006d000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_5:
+   \   00000000   00A00E40           DC32     0x400ea000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable0_6:
+   \   00000000   28800440           DC32     0x40048028
+    128          /********************************************************************/
+    129              
+
+   Maximum stack usage in bytes:
+
+     Function             .cstack
+     --------             -------
+     uart_getchar              0
+     uart_getchar_present      0
+     uart_init                 8
+     uart_putchar              0
+
+
+   Section sizes:
+
+     Function/Label       Bytes
+     --------------       -----
+     uart_init             204
+     uart_getchar           10
+     uart_putchar           10
+     uart_getchar_present    8
+     ??DataTable0            4
+     ??DataTable0_1          4
+     ??DataTable0_2          4
+     ??DataTable0_3          4
+     ??DataTable0_4          4
+     ??DataTable0_5          4
+     ??DataTable0_6          4
+
+ 
+ 260 bytes in section .text
+ 
+ 260 bytes of CODE memory
+
+Errors: none
+Warnings: 3

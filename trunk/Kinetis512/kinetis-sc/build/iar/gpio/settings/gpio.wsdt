@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+    
+    
+  <CurrentConfigs><Project>gpio_k60_tower/RAM_64KB</Project><Project>gpio_k40_tower/RAM_128KB</Project></CurrentConfigs><CurrentProj>gpio_k60_tower</CurrentProj><OverviewSelected>0</OverviewSelected></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>373</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>717</ColumnWidth1><ColumnWidth2>442</ColumnWidth2><ColumnWidth3>65</ColumnWidth3></Build>
+    <TerminalIO/><Debug-Log><ColumnWidth0>22</ColumnWidth0><ColumnWidth1>1305</ColumnWidth1></Debug-Log><SourceBrowser/></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-9603-1258</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>&lt;ws></ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower</ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower/IAR</ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower/cpu</ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower/cpu/headers</ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower/drivers</ExpandedNode><ExpandedNode>&lt;ws>/gpio_k60_tower/project</ExpandedNode><ExpandedNode>gpio_k40_tower</ExpandedNode><ExpandedNode>gpio_k60_tower</ExpandedNode><ExpandedNode>gpio_k60_tower/Output</ExpandedNode><ExpandedNode>gpio_k60_tower/Output/gpio_k60_tower.out</ExpandedNode><ExpandedNode>gpio_k60_tower/cpu</ExpandedNode><ExpandedNode>gpio_k60_tower/cpu/headers</ExpandedNode><ExpandedNode>gpio_k60_tower/platforms</ExpandedNode><ExpandedNode>gpio_k60_tower/project</ExpandedNode><ExpandedNode>gpio_k60_tower/project/Include</ExpandedNode><ExpandedNode>gpio_k60_tower/project/Include/DiskIO</ExpandedNode><ExpandedNode>gpio_k60_tower/project/Include/MCUabout</ExpandedNode><ExpandedNode>gpio_k60_tower/project/Include/SDHC</ExpandedNode><ExpandedNode>gpio_k60_tower/project/SDHC</ExpandedNode></NodeDict></Session>
+          </Tab>
+        <Tab><Identity>TabID-16961-32744</Identity><TabName>Source Browser</TabName><Factory>SourceBrowser</Factory><Session><TypeFilter>2147483647</TypeFilter><FileFilter>1</FileFilter></Session></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-16692-1330</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-12467-12251</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\drivers\uart\uart.c</Filename><XPos>0</XPos><YPos>69</YPos><SelStart>3307</SelStart><SelEnd>3307</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\hw_sdhc.h</Filename><XPos>0</XPos><YPos>30</YPos><SelStart>1455</SelStart><SelEnd>1549</SelEnd></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\cpu\arm_cm4.c</Filename><XPos>0</XPos><YPos>98</YPos><SelStart>3335</SelStart><SelEnd>3335</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\cpu\sysinit.c</Filename><XPos>0</XPos><YPos>57</YPos><SelStart>2563</SelStart><SelEnd>2563</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\drivers\mcg\mcg.c</Filename><XPos>0</XPos><YPos>188</YPos><SelStart>8808</SelStart><SelEnd>8808</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\cpu\arm_cm4.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>162</SelStart><SelEnd>162</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\BMP.c</Filename><XPos>0</XPos><YPos>18</YPos><SelStart>1184</SelStart><SelEnd>1184</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\diskio.c</Filename><XPos>0</XPos><YPos>200</YPos><SelStart>7237</SelStart><SelEnd>7311</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\hw_sdhc.c</Filename><XPos>0</XPos><YPos>708</YPos><SelStart>30734</SelStart><SelEnd>30757</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\FAT32.h</Filename><XPos>0</XPos><YPos>165</YPos><SelStart>5070</SelStart><SelEnd>5082</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\common.h</Filename><XPos>0</XPos><YPos>27</YPos><SelStart>1657</SelStart><SelEnd>1657</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\cpu\crt0.s</Filename><XPos>0</XPos><YPos>3</YPos><SelStart>218</SelStart><SelEnd>218</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\gpio_k60.c</Filename><XPos>0</XPos><YPos>384</YPos><SelStart>10958</SelStart><SelEnd>10958</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\FAT32.c</Filename><XPos>0</XPos><YPos>216</YPos><SelStart>6974</SelStart><SelEnd>6974</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\src\projects\gpio\diskio.h</Filename><XPos>0</XPos><YPos>60</YPos><SelStart>2629</SelStart><SelEnd>2629</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00e91150><key>iaridepm.enu1</key></Toolbar-00e91150></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>510</Bottom><Right>464</Right><x>-2</x><y>-2</y><xscreen>271</xscreen><yscreen>297</yscreen><sizeHorzCX>198389</sizeHorzCX><sizeHorzCY>426724</sizeHorzCY><sizeVertCX>341142</sizeVertCX><sizeVertCY>735632</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>141</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>143</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>205460</sizeHorzCY><sizeVertCX>198389</sizeVertCX><sizeVertCY>426724</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
