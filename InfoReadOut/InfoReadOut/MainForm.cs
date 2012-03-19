@@ -13,12 +13,16 @@ namespace InfoReadOut
     {
         public MyConfig config = new MyConfig();
         public Bitmap ImageSend;
+        ImageForm imgForm = new ImageForm();
 
         public MainForm()
         {
             InitializeComponent();
             Init();
         }
+        /// <summary>
+        /// 初始化窗口配置
+        /// </summary>
         public void Init()
         {
             if (ConfigWorker.FileDetect() == ConfigWorker.States.Exception)
@@ -35,24 +39,26 @@ namespace InfoReadOut
                 textBox_Front.Text = config.Front.ToString();
                 textBox_Behind.Text = config.Behind.ToString();
             }
-            
+
         }
         private void button_OpenFile_Click(object sender, EventArgs e)
         {
+            openFileDialog.InitialDirectory = config.FolderPath;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-
                 MessageBox.Show(openFileDialog.FileName);
                 config.FolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
                 ImageSend = ImageWorker.ImageDraw(
-                    TextWorker.Readin(openFileDialog.FileName, config.Width, config.Height, config.Front, config.Behind),
-                    config.Width, config.Height,6);
+                    TextWorker.Readin(openFileDialog.FileName, config.Width, config.Height,config.Useless, config.Front, config.Behind),
+                    config.Width, config.Height, 6);
+                button_Show_Click(this, e);
             }
 
         }
 
         private void button_OpenFolder_Click(object sender, EventArgs e)
         {
+            folderBrowserDialog.SelectedPath = config.FolderPath;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 MessageBox.Show(folderBrowserDialog.SelectedPath);
@@ -68,6 +74,7 @@ namespace InfoReadOut
             config.Front = Convert.ToUInt16(textBox_Front.Text.ToString());
             config.Behind = Convert.ToUInt16(textBox_Behind.Text.ToString());
             ConfigWorker.Save(config);
+            imgForm.Dispose();
         }
 
         private void textBox_Width_TextChanged(object sender, EventArgs e)
@@ -122,7 +129,10 @@ namespace InfoReadOut
 
         private void button_Show_Click(object sender, EventArgs e)
         {
-            ImageForm imgForm = new ImageForm(ImageSend);
+            ImageSend = ImageWorker.ImageDraw(
+                    TextWorker.Readin(openFileDialog.FileName, config.Width, config.Height,config.Useless, config.Front, config.Behind),
+                    config.Width, config.Height, 6);
+            imgForm.ImageRefresh(ImageSend);
             imgForm.Show();
         }
 
@@ -131,7 +141,6 @@ namespace InfoReadOut
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
             int yHeight = SystemInformation.WorkingArea.Height;//高度
             this.Location = new Point(xWidth - this.Size.Width, yHeight - this.Size.Height);//这里需要再减去窗体本身的宽度和高度的一半
-            this.Show();
         }
     }
 }
