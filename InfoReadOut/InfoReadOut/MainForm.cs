@@ -12,7 +12,7 @@ namespace InfoReadOut
     public partial class MainForm : Form
     {
         public MyConfig config = new MyConfig();
-        public Bitmap ImageSend;
+        public List<Bitmap> ImageSend = new List<Bitmap>();
         ImageForm imgForm = new ImageForm();
 
         public MainForm()
@@ -46,11 +46,7 @@ namespace InfoReadOut
             openFileDialog.InitialDirectory = config.FolderPath;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show(openFileDialog.FileName);
                 config.FolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                ImageSend = ImageWorker.ImageDraw(
-                    TextWorker.Readin(openFileDialog.FileName, config.Width, config.Height,config.Useless, config.Front, config.Behind),
-                    config.Width, config.Height, 6);
                 button_Show_Click(this, e);
             }
 
@@ -129,9 +125,13 @@ namespace InfoReadOut
 
         private void button_Show_Click(object sender, EventArgs e)
         {
-            ImageSend = ImageWorker.ImageDraw(
-                    TextWorker.Readin(openFileDialog.FileName, config.Width, config.Height,config.Useless, config.Front, config.Behind),
-                    config.Width, config.Height, 6);
+            foreach (String fileName in openFileDialog.FileNames)
+            {
+                Bitmap bitmap = ImageWorker.ImageDraw(
+                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
+                                   config.Width, config.Height, 6);
+                ImageSend.Add(bitmap);
+            }
             imgForm.ImageRefresh(ImageSend);
             imgForm.Show();
         }
@@ -140,7 +140,7 @@ namespace InfoReadOut
         {
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
             int yHeight = SystemInformation.WorkingArea.Height;//高度
-            this.Location = new Point(xWidth - this.Size.Width, yHeight - this.Size.Height);//这里需要再减去窗体本身的宽度和高度的一半
+            this.Location = new Point(xWidth - this.Size.Width, yHeight - this.Size.Height);
         }
     }
 }

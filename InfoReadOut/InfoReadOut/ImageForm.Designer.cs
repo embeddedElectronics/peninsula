@@ -48,7 +48,6 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDoubleClick);
             this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
             // 
             // ImageForm
@@ -60,12 +59,14 @@
             this.ClientSize = new System.Drawing.Size(116, 22);
             this.Controls.Add(this.pictureBox);
             this.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "ImageForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ImageForm";
             this.Shown += new System.EventHandler(this.ImageForm_Shown);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ImageForm_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ImageForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
