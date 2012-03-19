@@ -45,6 +45,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.button_Show = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +53,7 @@
             // button_OpenFile
             // 
             this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFile.Location = new System.Drawing.Point(46, 271);
+            this.button_OpenFile.Location = new System.Drawing.Point(43, 272);
             this.button_OpenFile.Name = "button_OpenFile";
             this.button_OpenFile.Size = new System.Drawing.Size(105, 32);
             this.button_OpenFile.TabIndex = 0;
@@ -63,7 +64,7 @@
             // button_OpenFolder
             // 
             this.button_OpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFolder.Location = new System.Drawing.Point(46, 319);
+            this.button_OpenFolder.Location = new System.Drawing.Point(43, 320);
             this.button_OpenFolder.Name = "button_OpenFolder";
             this.button_OpenFolder.Size = new System.Drawing.Size(105, 32);
             this.button_OpenFolder.TabIndex = 1;
@@ -194,13 +195,19 @@
             // button_Show
             // 
             this.button_Show.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Show.Location = new System.Drawing.Point(46, 371);
+            this.button_Show.Location = new System.Drawing.Point(43, 372);
             this.button_Show.Name = "button_Show";
             this.button_Show.Size = new System.Drawing.Size(105, 35);
             this.button_Show.TabIndex = 5;
             this.button_Show.Text = "显示图像";
             this.button_Show.UseVisualStyleBackColor = true;
             this.button_Show.Click += new System.EventHandler(this.button_Show_Click);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // MainForm
             // 
@@ -247,6 +254,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button button_Show;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
