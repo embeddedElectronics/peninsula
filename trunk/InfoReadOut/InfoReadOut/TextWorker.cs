@@ -15,7 +15,7 @@ namespace InfoReadOut
         /// <param name="_front">首行缩进</param>  
         /// <param name="_behind">尾行缩进</param>  
         /// <returns>得到的byte数组</returns>   
-        public static byte[] Readin(String _fileName, UInt16 _width, UInt16 _height, UInt16 _front, UInt16 _behind)
+        public static byte[] Readin(String _fileName, UInt16 _width, UInt16 _height, UInt16 _useless, UInt16 _front, UInt16 _behind)
         {
             try
             {
@@ -28,7 +28,15 @@ namespace InfoReadOut
                     // the file is reached.
                     while ((line = sr.ReadLine()) != null)
                     {
-                        info += UsefulReadout(line, _front, _behind) + " ";
+                        if (_useless != 0)
+                        {
+                            _useless--;
+                        }
+                        else
+                        {
+                            info += UsefulReadout(line, _front, _behind) + " ";
+                        }
+
                     }
                     return ConvertInfo(info, _width, _height);
                 }

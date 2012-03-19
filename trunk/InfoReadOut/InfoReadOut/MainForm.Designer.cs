@@ -94,7 +94,7 @@
             this.textBox_Width.Location = new System.Drawing.Point(92, 30);
             this.textBox_Width.Name = "textBox_Width";
             this.textBox_Width.Size = new System.Drawing.Size(49, 21);
-            this.textBox_Width.TabIndex = 3;
+            this.textBox_Width.TabIndex = 0;
             this.textBox_Width.TextChanged += new System.EventHandler(this.textBox_Width_TextChanged);
             // 
             // label2
@@ -120,7 +120,7 @@
             this.textBox_Height.Location = new System.Drawing.Point(92, 63);
             this.textBox_Height.Name = "textBox_Height";
             this.textBox_Height.Size = new System.Drawing.Size(49, 21);
-            this.textBox_Height.TabIndex = 0;
+            this.textBox_Height.TabIndex = 1;
             this.textBox_Height.TextChanged += new System.EventHandler(this.textBox_Height_TextChanged);
             // 
             // groupBox2
@@ -203,6 +203,7 @@
             // 
             // MainForm
             // 
+            this.AcceptButton = this.button_Show;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(200, 429);
@@ -211,6 +212,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button_OpenFolder);
             this.Controls.Add(this.button_OpenFile);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

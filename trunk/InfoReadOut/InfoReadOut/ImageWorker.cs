@@ -61,6 +61,12 @@ namespace InfoReadOut
             //// 算法到此结束，返回结果  
             return bmp;
         }
+        /// <summary>
+        /// 放大图像
+        /// </summary>
+        /// <param name="orign">原始图像</param>
+        /// <param name="iMagnify">放大倍数</param>
+        /// <returns>处理后的图像</returns>
         public static Bitmap ImageStretch(Bitmap orign, int iMagnify)
         {
             int iWidth, iHeight;
@@ -96,6 +102,14 @@ namespace InfoReadOut
             g.Dispose();
             return bmpNew;
         }
+        /// <summary>
+        /// 整体处理图像
+        /// </summary>
+        /// <param name="rawValues">图像源数据</param>
+        /// <param name="width">宽度</param>
+        /// <param name="height">高度</param>
+        /// <param name="iMagnify">放大倍数</param>
+        /// <returns>处理后的图像</returns>
         public static Bitmap ImageDraw(byte[] rawValues, int width, int height,int iMagnify)
         {
             return ImageStretch(ToGrayBitmap(rawValues, width, height),iMagnify);

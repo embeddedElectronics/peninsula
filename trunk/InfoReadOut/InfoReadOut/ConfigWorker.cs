@@ -5,6 +5,9 @@ namespace InfoReadOut
 {
     public class ConfigWorker
     {
+        /// <summary>
+        /// 程序状态
+        /// </summary>
         public enum States
         {
             OK,
