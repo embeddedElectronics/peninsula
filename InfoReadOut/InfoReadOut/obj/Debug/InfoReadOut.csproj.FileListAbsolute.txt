@@ -6,3 +6,5 @@ F:\My Works\peninsula\InfoReadOut\InfoReadOut\bin\Debug\InfoReadOut.exe
 F:\My Works\peninsula\InfoReadOut\InfoReadOut\bin\Debug\InfoReadOut.pdb
 F:\My Works\peninsula\InfoReadOut\InfoReadOut\obj\Debug\InfoReadOut.exe
 F:\My Works\peninsula\InfoReadOut\InfoReadOut\obj\Debug\InfoReadOut.pdb
+F:\My Works\peninsula\InfoReadOut\InfoReadOut\bin\Debug\Newtonsoft.Json.dll
+F:\My Works\peninsula\InfoReadOut\InfoReadOut\obj\Debug\InfoReadOut.ImageForm.resources

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace InfoReadOut
 {
-    class TextWorker
+    public class TextWorker
     {
         /// <summary>  
         /// 图像信息读入
@@ -17,7 +15,7 @@ namespace InfoReadOut
         /// <param name="_front">首行缩进</param>  
         /// <param name="_behind">尾行缩进</param>  
         /// <returns>得到的byte数组</returns>   
-        public static byte[,] Readin(String _fileName, UInt16 _width, UInt16 _height, UInt16 _front, UInt16 _behind)
+        public static byte[] Readin(String _fileName, UInt16 _width, UInt16 _height, UInt16 _front, UInt16 _behind)
         {
             try
             {
@@ -30,7 +28,7 @@ namespace InfoReadOut
                     // the file is reached.
                     while ((line = sr.ReadLine()) != null)
                     {
-                        info += UsefulReadout(line, _front, _behind);
+                        info += UsefulReadout(line, _front, _behind) + " ";
                     }
                     return ConvertInfo(info, _width, _height);
                 }
@@ -39,7 +37,7 @@ namespace InfoReadOut
             {
                 // Let the user know what went wrong.
                 MessageSender.e = e;
-                return new byte[1,1];
+                return new byte[1];
             }
         }
         /// <summary>  
@@ -51,9 +49,21 @@ namespace InfoReadOut
         /// <returns>处理过的字符串</returns>  
         private static String UsefulReadout(String _line, UInt16 _front, UInt16 _behind)
         {
-            _line.Substring(_front);
-            _line.Substring(0, _line.Length - _behind);
-            _line.TrimEnd(" ".ToCharArray());
+            try
+            {
+                if (_line != "")
+                {
+                    _line = _line.Substring(_front);
+                    _line = _line.Substring(0, _line.Length - _behind);
+                    _line = _line.TrimEnd(" ".ToCharArray());
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageSender.e = ex;
+            }
+
             return _line;
         }
         /// <summary>  
@@ -63,24 +73,40 @@ namespace InfoReadOut
         /// <param name="_width">图像的宽</param>  
         /// <param name="_height">图像的高</param>  
         /// <returns>得到的byte数组</returns>  
-        private static byte[,] ConvertInfo(String _info, UInt16 _width, UInt16 _height)
+        private static byte[] ConvertInfo(String _info, UInt16 _width, UInt16 _height)
         {
-            byte[,] bytearray = new byte[_width, _height];
-            UInt16 hex, width = 0, height = 0;
-            foreach (String s in _info.Split(' '))
+            byte[] bytearray = new byte[_width * _height];
+            UInt16 hex, width = _width, height = _height;
+            String debug;
+            try
             {
-                hex = Convert.ToUInt16(s);
-                bytearray[width, height] = Convert.ToByte(hex);
-                width++;
-                if (width == _width)
+
+                foreach (String s in _info.Split(' '))
                 {
-                    width = 0;
-                    height++;
+                    debug = s;
+                    if (s != "")
+                    {
+                        hex = UInt16.Parse(s, NumberStyles.HexNumber);
+                        bytearray[width + (height - 1) * _width - 1] = Convert.ToByte(hex);
+                        width--;
+                        if (width == 0)
+                        {
+                            width = _width;
+                            height--;
+                        }
+                        if (_height == 0)
+                        {
+                            break;
+                        }
+                    }
+
                 }
-                if (_height == height)
-                {
-                    break;
-                }
+
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageSender.e = ex;
             }
             return bytearray;
         }

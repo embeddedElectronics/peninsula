@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace InfoReadOut
 {
-    class ImageWorker
+    public class ImageWorker
     {
         /// <summary>  
         /// 将一个字节数组转换为8bit灰度位图  
@@ -63,6 +61,45 @@ namespace InfoReadOut
             //// 算法到此结束，返回结果  
             return bmp;
         }
+        public static Bitmap ImageStretch(Bitmap orign, int iMagnify)
+        {
+            int iWidth, iHeight;
+            Color myColor;
+            int i, j, i0, j0, i1, j1;
 
+            Bitmap bmpTmp = orign;
+            Bitmap bmpNew = new Bitmap(bmpTmp.Width * iMagnify, bmpTmp.Height * iMagnify);
+            Graphics g = Graphics.FromImage(bmpNew);
+
+            iWidth = bmpTmp.Width;
+            iHeight = bmpTmp.Height;
+
+            try
+            {
+                for (i = 0; i < iWidth; i++)
+                {
+                    i0 = i * iMagnify;
+                    for (j = 0; j < iHeight; j++)
+                    {
+                        j0 = j * iMagnify;
+                        myColor = bmpTmp.GetPixel(i, j);
+                        for (i1 = i0; i1 < i0 + iMagnify; i1++)
+                            for (j1 = j0; j1 < j0 + iMagnify; j1++)
+                                bmpNew.SetPixel(i1, j1, myColor);
+                    }
+                }
+            }
+            catch { }
+
+
+            bmpTmp.Dispose();
+            g.Dispose();
+            return bmpNew;
+        }
+        public static Bitmap ImageDraw(byte[] rawValues, int width, int height,int iMagnify)
+        {
+            return ImageStretch(ToGrayBitmap(rawValues, width, height),iMagnify);
+
+        }
     }
 }
