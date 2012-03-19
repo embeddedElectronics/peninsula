@@ -14,6 +14,8 @@ namespace InfoReadOut
         public MyConfig config = new MyConfig();
         public List<Bitmap> ImageSend = new List<Bitmap>();
         ImageForm imgForm = new ImageForm();
+        ProgressForm progressForm;
+        public int progress_Done, progress_Total;
 
         public MainForm()
         {
@@ -125,13 +127,12 @@ namespace InfoReadOut
 
         private void button_Show_Click(object sender, EventArgs e)
         {
-            foreach (String fileName in openFileDialog.FileNames)
-            {
-                Bitmap bitmap = ImageWorker.ImageDraw(
-                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
-                                   config.Width, config.Height, 6);
-                ImageSend.Add(bitmap);
-            }
+            progress_Done = 0;
+            progress_Total = openFileDialog.FileNames.Count<String>();
+            progressForm = new ProgressForm(this);
+            progressForm.SetMaximum();
+            backgroundWorker1.RunWorkerAsync();
+            progressForm.ShowDialog();
             imgForm.ImageRefresh(ImageSend);
             imgForm.Show();
         }
@@ -141,6 +142,21 @@ namespace InfoReadOut
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
             int yHeight = SystemInformation.WorkingArea.Height;//高度
             this.Location = new Point(xWidth - this.Size.Width, yHeight - this.Size.Height);
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            foreach (String fileName in openFileDialog.FileNames)
+            {
+                Bitmap bitmap = ImageWorker.ImageDraw(
+                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
+                                   config.Width, config.Height, 6);
+                ImageSend.Add(bitmap);
+                progress_Done++;
+
+            }
+
         }
     }
 }
