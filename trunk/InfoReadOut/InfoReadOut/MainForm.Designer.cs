@@ -74,6 +74,7 @@
             // openFileDialog
             // 
             this.openFileDialog.Filter = "TXT|*.txt";
+            this.openFileDialog.Multiselect = true;
             // 
             // groupBox1
             // 
