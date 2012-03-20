@@ -4,6 +4,7 @@ namespace InfoReadOut
 {
     public class MyConfig
     {
+        public String FilesPath { set; get; }
         public String FolderPath { set; get; }
         public UInt16 Width { set; get; }
         public UInt16 Height { set; get; }
