@@ -39,7 +39,7 @@ namespace InfoReadOut
                     int imgX = (_img.Size.Width - mouse.X) / 6;
                     int imgY = (_img.Size.Height - mouse.Y) / 6;
                     Color myColor = _img.GetPixel(mouse.X, mouse.Y);
-                    toolTip1.Show(imgX.ToString() + ":" + imgY.ToString() + ":" + myColor.G.ToString(), this.pictureBox);
+                    toolTip1.Show(imgX.ToString() + ":" + imgY.ToString() + "\n" + myColor.G.ToString() + ":" + (index + 1).ToString(), this.pictureBox);
                     break;
                 case MouseButtons.Right:
                     toolTip1.Hide(this);
@@ -51,23 +51,26 @@ namespace InfoReadOut
             this.Hide();
             e.Cancel = true;
         }
+        /// <summary>
+        /// 图像切换
+        /// </summary>
         public void ImageSwitch()
         {
             pictureBox.Image = img[index];
         }
         private void ImageForm_KeyDown(object sender, KeyEventArgs e)
         {
-            
+
             switch (e.KeyCode)
             {
                 case Keys.Left:
-                    if (index>0)
+                    if (index > 0)
                     {
                         index--;
                     }
-            	    break;
+                    break;
                 case Keys.Right:
-                    if (index < img.Count-1)
+                    if (index < img.Count - 1)
                     {
                         index++;
                     }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace InfoReadOut
@@ -16,6 +15,7 @@ namespace InfoReadOut
         ImageForm imgForm = new ImageForm();
         ProgressForm progressForm;
         public int progress_Done, progress_Total;
+        String[] FileNames;
 
         public MainForm()
         {
@@ -33,7 +33,7 @@ namespace InfoReadOut
             }
             if (ConfigWorker.Load(ref config) == ConfigWorker.States.OK)
             {
-                openFileDialog.InitialDirectory = config.FolderPath;
+                openFileDialog.InitialDirectory = config.FilesPath;
                 folderBrowserDialog.SelectedPath = config.FolderPath;
                 textBox_Width.Text = config.Width.ToString();
                 textBox_Height.Text = config.Height.ToString();
@@ -41,14 +41,20 @@ namespace InfoReadOut
                 textBox_Front.Text = config.Front.ToString();
                 textBox_Behind.Text = config.Behind.ToString();
             }
+            else
+            {
+                ConfigWorker.CreatNew(ref config);
+            }
 
         }
         private void button_OpenFile_Click(object sender, EventArgs e)
         {
-            openFileDialog.InitialDirectory = config.FolderPath;
+            openFileDialog.InitialDirectory = config.FilesPath;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                config.FolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                ImageSend = new List<Bitmap>();
+                config.FilesPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                FileNames = openFileDialog.FileNames;
                 button_Show_Click(this, e);
             }
 
@@ -59,8 +65,19 @@ namespace InfoReadOut
             folderBrowserDialog.SelectedPath = config.FolderPath;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show(folderBrowserDialog.SelectedPath);
+                ImageSend = new List<Bitmap>();
                 config.FolderPath = folderBrowserDialog.SelectedPath;
+                DirectoryInfo selectedFolder = new DirectoryInfo(config.FolderPath);
+                FileInfo[] selectedFiles = selectedFolder.GetFiles("*.txt");
+                int index = selectedFiles.Count();
+                FileNames = new String[index];
+
+                while (index > 0)
+                {
+                    FileNames[index - 1] = selectedFiles[index - 1].FullName;
+                    index--;
+                }
+                button_Show_Click(this, e);
             }
         }
 
@@ -127,14 +144,22 @@ namespace InfoReadOut
 
         private void button_Show_Click(object sender, EventArgs e)
         {
-            progress_Done = 0;
-            progress_Total = openFileDialog.FileNames.Count<String>();
-            progressForm = new ProgressForm(this);
-            progressForm.SetMaximum();
-            backgroundWorker1.RunWorkerAsync();
-            progressForm.ShowDialog();
-            imgForm.ImageRefresh(ImageSend);
-            imgForm.Show();
+            try
+            {
+                progress_Done = 0;
+                progress_Total = FileNames.Count();
+                progressForm = new ProgressForm(this);
+                progressForm.SetMaximum();
+                backgroundWorker1.RunWorkerAsync();
+                progressForm.ShowDialog();
+                imgForm.ImageRefresh(ImageSend);
+                imgForm.Show();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -146,8 +171,7 @@ namespace InfoReadOut
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-
-            foreach (String fileName in openFileDialog.FileNames)
+            foreach (String fileName in FileNames)
             {
                 Bitmap bitmap = ImageWorker.ImageDraw(
                                    TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
