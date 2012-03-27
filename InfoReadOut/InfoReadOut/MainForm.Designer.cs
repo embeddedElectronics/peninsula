@@ -46,6 +46,7 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.button_Show = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button_Filter = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +54,7 @@
             // button_OpenFile
             // 
             this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFile.Location = new System.Drawing.Point(43, 272);
+            this.button_OpenFile.Location = new System.Drawing.Point(43, 261);
             this.button_OpenFile.Name = "button_OpenFile";
             this.button_OpenFile.Size = new System.Drawing.Size(105, 32);
             this.button_OpenFile.TabIndex = 0;
@@ -64,7 +65,7 @@
             // button_OpenFolder
             // 
             this.button_OpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFolder.Location = new System.Drawing.Point(43, 320);
+            this.button_OpenFolder.Location = new System.Drawing.Point(43, 299);
             this.button_OpenFolder.Name = "button_OpenFolder";
             this.button_OpenFolder.Size = new System.Drawing.Size(105, 32);
             this.button_OpenFolder.TabIndex = 1;
@@ -74,7 +75,7 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "TXT|*.txt";
+            this.openFileDialog.Filter = "图像文件|IF*.txt|数据文件|DF*.txt|所有支持文件|*.txt";
             this.openFileDialog.Multiselect = true;
             // 
             // groupBox1
@@ -195,7 +196,7 @@
             // button_Show
             // 
             this.button_Show.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Show.Location = new System.Drawing.Point(43, 372);
+            this.button_Show.Location = new System.Drawing.Point(43, 376);
             this.button_Show.Name = "button_Show";
             this.button_Show.Size = new System.Drawing.Size(105, 35);
             this.button_Show.TabIndex = 5;
@@ -209,12 +210,23 @@
             this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // button_Filter
+            // 
+            this.button_Filter.Location = new System.Drawing.Point(43, 337);
+            this.button_Filter.Name = "button_Filter";
+            this.button_Filter.Size = new System.Drawing.Size(105, 33);
+            this.button_Filter.TabIndex = 6;
+            this.button_Filter.Text = "文件过滤";
+            this.button_Filter.UseVisualStyleBackColor = true;
+            this.button_Filter.Click += new System.EventHandler(this.button_Filter_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.button_Show;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(200, 429);
+            this.Controls.Add(this.button_Filter);
             this.Controls.Add(this.button_Show);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -255,6 +267,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button button_Show;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button button_Filter;
     }
 }
 
