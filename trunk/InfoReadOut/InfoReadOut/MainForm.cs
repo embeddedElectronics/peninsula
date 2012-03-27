@@ -12,10 +12,12 @@ namespace InfoReadOut
     {
         public MyConfig config = new MyConfig();
         public List<Bitmap> ImageSend = new List<Bitmap>();
+        public List<String[]> DataSend = new List<String[]>();
         ImageForm imgForm = new ImageForm();
+        DataForm dataForm = new DataForm();
         ProgressForm progressForm;
         public int progress_Done, progress_Total;
-        String[] FileNames;
+        String[] ImageFileNames;
 
         public MainForm()
         {
@@ -54,7 +56,7 @@ namespace InfoReadOut
             {
                 ImageSend = new List<Bitmap>();
                 config.FilesPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                FileNames = openFileDialog.FileNames;
+                ImageFileNames = openFileDialog.FileNames;
                 button_Show_Click(this, e);
             }
 
@@ -68,16 +70,18 @@ namespace InfoReadOut
                 ImageSend = new List<Bitmap>();
                 config.FolderPath = folderBrowserDialog.SelectedPath;
                 DirectoryInfo selectedFolder = new DirectoryInfo(config.FolderPath);
-                FileInfo[] selectedFiles = selectedFolder.GetFiles("*.txt");
-                int index = selectedFiles.Count();
-                FileNames = new String[index];
-
+                FileInfo[] selectedImageFiles = selectedFolder.GetFiles(config.Filter_ImageFile);
+                int index = selectedImageFiles.Count();
+                ImageFileNames = new String[index];
                 while (index > 0)
                 {
-                    FileNames[index - 1] = selectedFiles[index - 1].FullName;
+                    ImageFileNames[index - 1] = selectedImageFiles[index - 1].FullName;
                     index--;
                 }
+                
                 button_Show_Click(this, e);
+                
+                
             }
         }
 
@@ -89,7 +93,6 @@ namespace InfoReadOut
             config.Front = Convert.ToUInt16(textBox_Front.Text.ToString());
             config.Behind = Convert.ToUInt16(textBox_Behind.Text.ToString());
             ConfigWorker.Save(config);
-            imgForm.Dispose();
         }
 
         private void textBox_Width_TextChanged(object sender, EventArgs e)
@@ -147,13 +150,16 @@ namespace InfoReadOut
             try
             {
                 progress_Done = 0;
-                progress_Total = FileNames.Count();
+                progress_Total = ImageFileNames.Count();
                 progressForm = new ProgressForm(this);
                 progressForm.SetMaximum();
                 backgroundWorker1.RunWorkerAsync();
                 progressForm.ShowDialog();
                 imgForm.ImageRefresh(ImageSend);
+                dataForm.SetStartPostion(imgForm.Location);
+                dataForm.Show();
                 imgForm.Show();
+                
             }
             catch (System.Exception ex)
             {
@@ -171,7 +177,7 @@ namespace InfoReadOut
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            foreach (String fileName in FileNames)
+            foreach (String fileName in ImageFileNames)
             {
                 Bitmap bitmap = ImageWorker.ImageDraw(
                                    TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
@@ -181,6 +187,12 @@ namespace InfoReadOut
 
             }
 
+        }
+
+        private void button_Filter_Click(object sender, EventArgs e)
+        {
+            FilterForm ff = new FilterForm(ref config);
+            ff.ShowDialog();
         }
     }
 }
