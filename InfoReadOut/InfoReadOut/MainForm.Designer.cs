@@ -47,6 +47,8 @@
             this.button_Show = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.button_Filter = new System.Windows.Forms.Button();
+            this.button_Transform = new System.Windows.Forms.Button();
+            this.checkBox_NeedDecode = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -54,9 +56,9 @@
             // button_OpenFile
             // 
             this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFile.Location = new System.Drawing.Point(43, 261);
+            this.button_OpenFile.Location = new System.Drawing.Point(10, 265);
             this.button_OpenFile.Name = "button_OpenFile";
-            this.button_OpenFile.Size = new System.Drawing.Size(105, 32);
+            this.button_OpenFile.Size = new System.Drawing.Size(105, 22);
             this.button_OpenFile.TabIndex = 0;
             this.button_OpenFile.Text = "打开文件";
             this.button_OpenFile.UseVisualStyleBackColor = true;
@@ -65,9 +67,9 @@
             // button_OpenFolder
             // 
             this.button_OpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_OpenFolder.Location = new System.Drawing.Point(43, 299);
+            this.button_OpenFolder.Location = new System.Drawing.Point(10, 293);
             this.button_OpenFolder.Name = "button_OpenFolder";
-            this.button_OpenFolder.Size = new System.Drawing.Size(105, 32);
+            this.button_OpenFolder.Size = new System.Drawing.Size(105, 22);
             this.button_OpenFolder.TabIndex = 1;
             this.button_OpenFolder.Text = "打开文件夹";
             this.button_OpenFolder.UseVisualStyleBackColor = true;
@@ -196,9 +198,9 @@
             // button_Show
             // 
             this.button_Show.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Show.Location = new System.Drawing.Point(43, 376);
+            this.button_Show.Location = new System.Drawing.Point(46, 358);
             this.button_Show.Name = "button_Show";
-            this.button_Show.Size = new System.Drawing.Size(105, 35);
+            this.button_Show.Size = new System.Drawing.Size(105, 21);
             this.button_Show.TabIndex = 5;
             this.button_Show.Text = "显示图像";
             this.button_Show.UseVisualStyleBackColor = true;
@@ -212,13 +214,32 @@
             // 
             // button_Filter
             // 
-            this.button_Filter.Location = new System.Drawing.Point(43, 337);
+            this.button_Filter.Location = new System.Drawing.Point(46, 331);
             this.button_Filter.Name = "button_Filter";
-            this.button_Filter.Size = new System.Drawing.Size(105, 33);
+            this.button_Filter.Size = new System.Drawing.Size(105, 21);
             this.button_Filter.TabIndex = 6;
             this.button_Filter.Text = "文件过滤";
             this.button_Filter.UseVisualStyleBackColor = true;
             this.button_Filter.Click += new System.EventHandler(this.button_Filter_Click);
+            // 
+            // button_Transform
+            // 
+            this.button_Transform.Location = new System.Drawing.Point(46, 385);
+            this.button_Transform.Name = "button_Transform";
+            this.button_Transform.Size = new System.Drawing.Size(105, 20);
+            this.button_Transform.TabIndex = 7;
+            this.button_Transform.Text = "转换";
+            this.button_Transform.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_NeedDecode
+            // 
+            this.checkBox_NeedDecode.AutoSize = true;
+            this.checkBox_NeedDecode.Location = new System.Drawing.Point(121, 282);
+            this.checkBox_NeedDecode.Name = "checkBox_NeedDecode";
+            this.checkBox_NeedDecode.Size = new System.Drawing.Size(72, 16);
+            this.checkBox_NeedDecode.TabIndex = 8;
+            this.checkBox_NeedDecode.Text = "需要解码";
+            this.checkBox_NeedDecode.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -226,6 +247,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(200, 429);
+            this.Controls.Add(this.checkBox_NeedDecode);
+            this.Controls.Add(this.button_Transform);
             this.Controls.Add(this.button_Filter);
             this.Controls.Add(this.button_Show);
             this.Controls.Add(this.groupBox2);
@@ -244,6 +267,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -268,6 +292,8 @@
         private System.Windows.Forms.Button button_Show;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button button_Filter;
+        private System.Windows.Forms.Button button_Transform;
+        private System.Windows.Forms.CheckBox checkBox_NeedDecode;
     }
 }
 

@@ -9,10 +9,15 @@ namespace InfoReadOut
     public partial class ImageForm : Form
     {
         List<Bitmap> img;
+        MyConfig config;
         int index = 0;
         public ImageForm()
         {
             InitializeComponent();
+        }
+        public void SetConfig(MyConfig _config)
+        {
+            config = _config;
         }
         /// <summary>
         /// 图像显示刷新
@@ -36,8 +41,8 @@ namespace InfoReadOut
             {
                 case MouseButtons.Left:
                     Point mouse = this.PointToClient(Control.MousePosition);
-                    int imgX = (_img.Size.Width - mouse.X) / 6;
-                    int imgY = (_img.Size.Height - mouse.Y) / 6;
+                    int imgX = (_img.Size.Width - mouse.X) / config.Magnify;
+                    int imgY = (_img.Size.Height - mouse.Y) / config.Magnify;
                     Color myColor = _img.GetPixel(mouse.X, mouse.Y);
                     toolTip1.Show(imgX.ToString() + ":" + imgY.ToString() + "\n" + myColor.G.ToString() + ":" + (index + 1).ToString(), this.pictureBox);
                     break;
