@@ -14,7 +14,7 @@ namespace InfoReadOut
         public List<Bitmap> ImageSend = new List<Bitmap>();
         public List<String[]> DataSend = new List<String[]>();
         ImageForm imgForm = new ImageForm();
-        DataForm dataForm = new DataForm();
+        //DataForm dataForm = new DataForm();
         ProgressForm progressForm;
         public int progress_Done, progress_Total;
         String[] ImageFileNames;
@@ -37,6 +37,7 @@ namespace InfoReadOut
             {
                 openFileDialog.InitialDirectory = config.FilesPath;
                 folderBrowserDialog.SelectedPath = config.FolderPath;
+                checkBox_NeedDecode.Checked = config.NeedDecode;
                 textBox_Width.Text = config.Width.ToString();
                 textBox_Height.Text = config.Height.ToString();
                 textBox_Useless.Text = config.Useless.ToString();
@@ -78,15 +79,16 @@ namespace InfoReadOut
                     ImageFileNames[index - 1] = selectedImageFiles[index - 1].FullName;
                     index--;
                 }
-                
+
                 button_Show_Click(this, e);
-                
-                
+
+
             }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            config.NeedDecode = checkBox_NeedDecode.Checked;
             config.Width = Convert.ToUInt16(textBox_Width.Text.ToString());
             config.Height = Convert.ToUInt16(textBox_Height.Text.ToString());
             config.Useless = Convert.ToUInt16(textBox_Useless.Text.ToString());
@@ -155,17 +157,18 @@ namespace InfoReadOut
                 progressForm.SetMaximum();
                 backgroundWorker1.RunWorkerAsync();
                 progressForm.ShowDialog();
+                imgForm.SetConfig(config);
                 imgForm.ImageRefresh(ImageSend);
-                dataForm.SetStartPostion(imgForm.Location);
-                dataForm.Show();
+                //dataForm.SetStartPostion(imgForm.Location);
+                //dataForm.Show();
                 imgForm.Show();
-                
+
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -180,8 +183,8 @@ namespace InfoReadOut
             foreach (String fileName in ImageFileNames)
             {
                 Bitmap bitmap = ImageWorker.ImageDraw(
-                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind),
-                                   config.Width, config.Height, 6);
+                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked),
+                                   config.Width, config.Height, config.Magnify);
                 ImageSend.Add(bitmap);
                 progress_Done++;
 
