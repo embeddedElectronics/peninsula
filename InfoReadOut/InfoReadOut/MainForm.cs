@@ -21,6 +21,7 @@ namespace InfoReadOut
         //DataForm dataForm = new DataForm();
         ProgressForm progressForm;
         public int progress_Done, progress_Total;
+        int[] ThreadS, ThreadE;
         String[] ImageFileNames;
 
         public MainForm()
@@ -169,6 +170,7 @@ namespace InfoReadOut
                 progress_Total = ImageFileNames.Count();
                 progressForm = new ProgressForm(this);
                 progressForm.SetMaximum();
+                ThreadSE();
                 _thread.Start();
                 progressForm.ShowDialog();
                 _thread.Join();
@@ -190,6 +192,32 @@ namespace InfoReadOut
             }
 
         }
+        private void ThreadSE()
+        {
+            ThreadS = new int[config.ThreadNum];
+            ThreadE = new int[config.ThreadNum];
+            int c = progress_Total / config.ThreadNum;
+            int t = progress_Total % config.ThreadNum;
+            ThreadS[0] = 0;
+            ThreadE[0] = c + (t > 0 ? 1 : 0) - 1;
+            if (ThreadE[0] < (progress_Total - 1))
+            {
+                for (int i = 1; i < config.ThreadNum; i++)
+                {
+                    ThreadS[i] = ThreadE[i - 1] + 1;
+                    ThreadE[i] = ThreadS[i] + c + (t > i ? 1 : 0) - 1;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < config.ThreadNum; i++)
+                {
+                    ThreadS[i] = 0;
+                    ThreadE[i] = -1;
+                }
+            }
+
+        }
         private void ShowThread()
         {
             Thread[] subThread = new Thread[config.ThreadNum];
@@ -203,9 +231,10 @@ namespace InfoReadOut
         {
             ThreadImageData[(int)data] = new List<Byte[]>();
             ThreadImageSend[(int)data] = new List<Bitmap>();
+            int num = (int)data;
             if (checkBox_IsSDFile.Checked == false)
             {
-                for (int i = (int)data * (progress_Total / config.ThreadNum); i < ((config.ThreadNum == (int)data) ? (progress_Total / config.ThreadNum) * ((int)data + 1) : progress_Total); i++)
+                for (int i = ThreadS[num]; i <= ThreadE[num]; i++)
                 {
                     String fileName = ImageFileNames[i];
                     Byte[] imageData = TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
@@ -217,7 +246,7 @@ namespace InfoReadOut
             }
             else
             {
-                for (int i = (int)data * (progress_Total / config.ThreadNum); i < ((config.ThreadNum == (int)data) ? (progress_Total / config.ThreadNum) * ((int)data + 1) : progress_Total); i++)
+                for (int i = ThreadS[num]; i <= ThreadE[num]; i++)
                 {
                     String fileName = ImageFileNames[i];
                     Byte[] imageData = TextWorker.ReadinSD(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
@@ -233,36 +262,6 @@ namespace InfoReadOut
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
             int yHeight = SystemInformation.WorkingArea.Height;//高度
             this.Location = new Point(xWidth - this.Size.Width, yHeight - this.Size.Height);
-        }
-
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-            if (checkBox_IsSDFile.Checked == false)
-            {
-                for (int i = 0; i < progress_Total / 2; i++)
-                {
-                    String fileName = ImageFileNames[i];
-                    Byte[] imageData = TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
-                    ImageData.Insert(i, imageData);
-                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
-                    ImageSend.Insert(i, bitmap);
-                    progress_Done++;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < progress_Total / 2; i++)
-                {
-                    String fileName = ImageFileNames[i];
-                    Byte[] imageData = TextWorker.ReadinSD(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
-                    ImageData.Insert(i, imageData);
-                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
-                    ImageSend.Insert(i, bitmap);
-                    progress_Done++;
-                }
-            }
-
         }
 
         private void button_Filter_Click(object sender, EventArgs e)
