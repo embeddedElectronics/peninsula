@@ -26,6 +26,7 @@ namespace InfoReadOut
         public void ImageRefresh(List<Bitmap> _img)
         {
             img = _img;
+            index = 0;
             pictureBox.Image = img[0];
         }
         private void ImageForm_Shown(object sender, EventArgs e)
