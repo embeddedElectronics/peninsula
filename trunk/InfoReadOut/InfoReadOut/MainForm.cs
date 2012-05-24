@@ -5,13 +5,17 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace InfoReadOut
 {
     public partial class MainForm : Form
     {
         public MyConfig config = new MyConfig();
-        public List<Bitmap> ImageSend = new List<Bitmap>();
+        public List<Bitmap> ImageSend;
+        public List<Byte[]> ImageData;
+        public List<Bitmap>[] ThreadImageSend;
+        public List<Byte[]>[] ThreadImageData;
         public List<String[]> DataSend = new List<String[]>();
         ImageForm imgForm = new ImageForm();
         //DataForm dataForm = new DataForm();
@@ -38,11 +42,13 @@ namespace InfoReadOut
                 openFileDialog.InitialDirectory = config.FilesPath;
                 folderBrowserDialog.SelectedPath = config.FolderPath;
                 checkBox_NeedDecode.Checked = config.NeedDecode;
+                checkBox_IsSDFile.Checked = config.SDFile;
                 textBox_Width.Text = config.Width.ToString();
                 textBox_Height.Text = config.Height.ToString();
                 textBox_Useless.Text = config.Useless.ToString();
                 textBox_Front.Text = config.Front.ToString();
                 textBox_Behind.Text = config.Behind.ToString();
+                textBox_ThreadNum.Text = config.ThreadNum.ToString();
             }
             else
             {
@@ -89,11 +95,13 @@ namespace InfoReadOut
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             config.NeedDecode = checkBox_NeedDecode.Checked;
+            config.SDFile = checkBox_IsSDFile.Checked;
             config.Width = Convert.ToUInt16(textBox_Width.Text.ToString());
             config.Height = Convert.ToUInt16(textBox_Height.Text.ToString());
             config.Useless = Convert.ToUInt16(textBox_Useless.Text.ToString());
             config.Front = Convert.ToUInt16(textBox_Front.Text.ToString());
             config.Behind = Convert.ToUInt16(textBox_Behind.Text.ToString());
+            config.ThreadNum = Convert.ToUInt16(textBox_ThreadNum.Text.ToString());
             ConfigWorker.Save(config);
         }
 
@@ -151,12 +159,24 @@ namespace InfoReadOut
         {
             try
             {
+                ImageSend = new List<Bitmap>();
+                ImageData = new List<Byte[]>();
+                ThreadImageSend = new List<Bitmap>[config.ThreadNum];
+                ThreadImageData = new List<Byte[]>[config.ThreadNum];
+                Thread _thread = new Thread(ShowThread);
+
                 progress_Done = 0;
                 progress_Total = ImageFileNames.Count();
                 progressForm = new ProgressForm(this);
                 progressForm.SetMaximum();
-                backgroundWorker1.RunWorkerAsync();
+                _thread.Start();
                 progressForm.ShowDialog();
+                _thread.Join();
+                for (int i = 0; i < config.ThreadNum; i++)
+                {
+                    ImageSend.AddRange(ThreadImageSend[i]);
+                    ImageData.AddRange(ThreadImageData[i]);
+                }
                 imgForm.SetConfig(config);
                 imgForm.ImageRefresh(ImageSend);
                 //dataForm.SetStartPostion(imgForm.Location);
@@ -170,7 +190,44 @@ namespace InfoReadOut
             }
 
         }
-
+        private void ShowThread()
+        {
+            Thread[] subThread = new Thread[config.ThreadNum];
+            for (int i = 0; i < config.ThreadNum; i++)
+            {
+                subThread[i] = new Thread(ShowSubThread);
+                subThread[i].Start(i);
+            }
+        }
+        private void ShowSubThread(object data)
+        {
+            ThreadImageData[(int)data] = new List<Byte[]>();
+            ThreadImageSend[(int)data] = new List<Bitmap>();
+            if (checkBox_IsSDFile.Checked == false)
+            {
+                for (int i = (int)data * (progress_Total / config.ThreadNum); i < ((config.ThreadNum == (int)data) ? (progress_Total / config.ThreadNum) * ((int)data + 1) : progress_Total); i++)
+                {
+                    String fileName = ImageFileNames[i];
+                    Byte[] imageData = TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
+                    ThreadImageData[(int)data].Add(imageData);
+                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
+                    ThreadImageSend[(int)data].Add(bitmap);
+                    progress_Done++;
+                }
+            }
+            else
+            {
+                for (int i = (int)data * (progress_Total / config.ThreadNum); i < ((config.ThreadNum == (int)data) ? (progress_Total / config.ThreadNum) * ((int)data + 1) : progress_Total); i++)
+                {
+                    String fileName = ImageFileNames[i];
+                    Byte[] imageData = TextWorker.ReadinSD(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
+                    ThreadImageData[(int)data].Add(imageData);
+                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
+                    ThreadImageSend[(int)data].Add(bitmap);
+                    progress_Done++;
+                }
+            }
+        }
         private void MainForm_Load(object sender, EventArgs e)
         {
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
@@ -180,14 +237,30 @@ namespace InfoReadOut
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            foreach (String fileName in ImageFileNames)
-            {
-                Bitmap bitmap = ImageWorker.ImageDraw(
-                                   TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked),
-                                   config.Width, config.Height, config.Magnify);
-                ImageSend.Add(bitmap);
-                progress_Done++;
 
+            if (checkBox_IsSDFile.Checked == false)
+            {
+                for (int i = 0; i < progress_Total / 2; i++)
+                {
+                    String fileName = ImageFileNames[i];
+                    Byte[] imageData = TextWorker.Readin(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
+                    ImageData.Insert(i, imageData);
+                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
+                    ImageSend.Insert(i, bitmap);
+                    progress_Done++;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < progress_Total / 2; i++)
+                {
+                    String fileName = ImageFileNames[i];
+                    Byte[] imageData = TextWorker.ReadinSD(fileName, config.Width, config.Height, config.Useless, config.Front, config.Behind, checkBox_NeedDecode.Checked);
+                    ImageData.Insert(i, imageData);
+                    Bitmap bitmap = ImageWorker.ImageDraw(imageData, config.Width, config.Height, config.Magnify);
+                    ImageSend.Insert(i, bitmap);
+                    progress_Done++;
+                }
             }
 
         }
@@ -196,6 +269,60 @@ namespace InfoReadOut
         {
             FilterForm ff = new FilterForm(ref config);
             ff.ShowDialog();
+        }
+
+        private void button_Transform_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                progress_Done = 0;
+                progress_Total = ImageFileNames.Count();
+                progressForm = new ProgressForm(this);
+                progressForm.SetMaximum();
+                backgroundWorker2.RunWorkerAsync();
+                progressForm.ShowDialog();
+                //dataForm.SetStartPostion(imgForm.Location);
+                //dataForm.Show();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            String str;
+            foreach (String fileName in ImageFileNames)
+            {
+                Byte[] imageData;
+                using (FileStream fs = File.OpenRead(fileName))
+                {
+                    imageData = new byte[fs.Length];
+                    // Read and display lines from the file until the end of 
+                    // the file is reached.
+                    fs.Read(imageData, 0, imageData.Length);
+                }
+
+                str = BitConverter.ToString(imageData);
+                str = str.Replace("-", " ");
+                using (StreamWriter sw = new StreamWriter(fileName))
+                {
+                    sw.Write(str);
+                }
+                progress_Done++;
+
+            }
+        }
+
+        private void textBox_ThreadNum_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                config.ThreadNum = Convert.ToUInt16(textBox_ThreadNum.Text.ToString());
+
+            }
+            catch { }
         }
     }
 }

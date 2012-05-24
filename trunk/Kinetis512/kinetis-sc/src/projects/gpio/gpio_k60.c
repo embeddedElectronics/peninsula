@@ -448,7 +448,7 @@ void main(void)
 	        FAT32_Add_Dat(&FileInfo,sizeof(info),info);
                 FAT32_Add_Dat(&FileInfo,sizeof(info),info);
                 
-	          BmpBIT8Write(/*&FileInfo,*/"\\6.bmp",80,70,pic,ColorTable);
+	        BmpBIT8Write(/*&FileInfo,*/"\\6.bmp",80,70,pic,ColorTable);
                 
                 
                 i++;
