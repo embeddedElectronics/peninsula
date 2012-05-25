@@ -166,6 +166,7 @@ namespace InfoReadOut
                 ThreadImageData = new List<Byte[]>[config.ThreadNum];
                 Thread _thread = new Thread(ShowThread);
 
+                GC.Collect();
                 progress_Done = 0;
                 progress_Total = ImageFileNames.Count();
                 progressForm = new ProgressForm(this);
