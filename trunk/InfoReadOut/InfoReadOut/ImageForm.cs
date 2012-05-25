@@ -26,6 +26,7 @@ namespace InfoReadOut
         public void ImageRefresh(List<Bitmap> _img)
         {
             img = _img;
+            GC.Collect();
             index = 0;
             pictureBox.Image = img[0];
         }
