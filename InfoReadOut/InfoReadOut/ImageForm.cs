@@ -9,6 +9,7 @@ namespace InfoReadOut
     public partial class ImageForm : Form
     {
         List<Bitmap> img;
+        String[] imgFileNames;
         MyConfig config;
         int index = 0;
         public ImageForm()
@@ -23,9 +24,10 @@ namespace InfoReadOut
         /// 图像显示刷新
         /// </summary>
         /// <param name="_img">要显示的图像</param>
-        public void ImageRefresh(List<Bitmap> _img)
+        public void ImageRefresh(List<Bitmap> _img, String[] _imgFileNames)
         {
             img = _img;
+            imgFileNames = _imgFileNames;
             GC.Collect();
             index = 0;
             pictureBox.Image = img[0];
@@ -46,7 +48,9 @@ namespace InfoReadOut
                     int imgX = (_img.Size.Width - mouse.X) / config.Magnify;
                     int imgY = (_img.Size.Height - mouse.Y) / config.Magnify;
                     Color myColor = _img.GetPixel(mouse.X, mouse.Y);
-                    toolTip1.Show(imgX.ToString() + ":" + imgY.ToString() + "\n" + myColor.G.ToString() + ":" + (index + 1).ToString(), this.pictureBox);
+                    toolTip1.Show(imgX.ToString() + ":" + imgY.ToString() + "\n" +
+                        myColor.G.ToString() + ":" + (index + 1).ToString() + "\n" +
+                        System.IO.Path.GetFileName(imgFileNames[index]), this.pictureBox);
                     break;
                 case MouseButtons.Right:
                     toolTip1.Hide(this);

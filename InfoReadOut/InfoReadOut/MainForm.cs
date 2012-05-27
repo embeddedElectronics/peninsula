@@ -181,7 +181,7 @@ namespace InfoReadOut
                     ImageData.AddRange(ThreadImageData[i]);
                 }
                 imgForm.SetConfig(config);
-                imgForm.ImageRefresh(ImageSend);
+                imgForm.ImageRefresh(ImageSend, ImageFileNames);
                 //dataForm.SetStartPostion(imgForm.Location);
                 //dataForm.Show();
                 imgForm.Show();
