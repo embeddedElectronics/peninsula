@@ -53,6 +53,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox_ThreadNum = new System.Windows.Forms.TextBox();
+            this.checkBox_MoreData = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -255,6 +256,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBox_MoreData);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.textBox_ThreadNum);
             this.groupBox3.Controls.Add(this.checkBox_IsSDFile);
@@ -284,6 +286,16 @@
             this.textBox_ThreadNum.Text = "2";
             this.textBox_ThreadNum.TextChanged += new System.EventHandler(this.textBox_ThreadNum_TextChanged);
             // 
+            // checkBox_MoreData
+            // 
+            this.checkBox_MoreData.AutoSize = true;
+            this.checkBox_MoreData.Location = new System.Drawing.Point(6, 127);
+            this.checkBox_MoreData.Name = "checkBox_MoreData";
+            this.checkBox_MoreData.Size = new System.Drawing.Size(74, 17);
+            this.checkBox_MoreData.TabIndex = 12;
+            this.checkBox_MoreData.Text = "其他数据";
+            this.checkBox_MoreData.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.button_Show;
@@ -303,8 +315,8 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MainForm";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -342,6 +354,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBox_ThreadNum;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBox_MoreData;
     }
 }
 

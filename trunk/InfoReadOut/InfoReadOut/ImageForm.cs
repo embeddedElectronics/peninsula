@@ -8,25 +8,29 @@ namespace InfoReadOut
 {
     public partial class ImageForm : Form
     {
-        List<Bitmap> img;
+        List<Bitmap> img, imgProc;
         String[] imgFileNames;
         MyConfig config;
+        DataForm dataForm;
         int index = 0;
+        bool bProc = false;
         public ImageForm()
         {
             InitializeComponent();
         }
-        public void SetConfig(MyConfig _config)
+        public void SetConfig(MyConfig _config, DataForm _dataForm)
         {
             config = _config;
+            dataForm = _dataForm;
         }
         /// <summary>
         /// 图像显示刷新
         /// </summary>
         /// <param name="_img">要显示的图像</param>
-        public void ImageRefresh(List<Bitmap> _img, String[] _imgFileNames)
+        public void ImageRefresh(List<Bitmap> _img, List<Bitmap> _imgProc, String[] _imgFileNames)
         {
             img = _img;
+            imgProc = _imgProc;
             imgFileNames = _imgFileNames;
             GC.Collect();
             index = 0;
@@ -37,6 +41,7 @@ namespace InfoReadOut
             int xWidth = SystemInformation.WorkingArea.Width;//获取屏幕宽度
             int yHeight = SystemInformation.WorkingArea.Height;//高度
             this.Location = new Point((xWidth - this.Size.Width) / 2, (yHeight - this.Size.Height) / 2);//这里需要再减去窗体本身的宽度和高度的一半
+            dataForm.SetStartPostion(this.Location);
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
@@ -67,7 +72,14 @@ namespace InfoReadOut
         /// </summary>
         public void ImageSwitch()
         {
-            pictureBox.Image = img[index];
+            if (bProc)
+            {
+                pictureBox.Image = img[index];
+            } 
+            else
+            {
+                pictureBox.Image = imgProc[index];
+            }
         }
         private void ImageForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -86,7 +98,18 @@ namespace InfoReadOut
                         index++;
                     }
                     break;
+                case Keys.C:
+                    if (bProc == true)
+                    {
+                        bProc = false;
+                    }
+                    else
+                    {
+                        bProc = true;
+                    }
+                    break;
             }
+            dataForm.DisplayData(index);
             ImageSwitch();
         }
     }

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigWorker.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="DataForm.cs">
       <SubType>Form</SubType>
     </Compile>
