@@ -7,6 +7,8 @@ namespace InfoReadOut
 {
     public class TextWorker
     {
+        #region Read
+
         /// <summary>  
         /// 图像信息读入(+2重载)
         /// </summary>  
@@ -113,7 +115,15 @@ namespace InfoReadOut
                 // The using statement also closes the StreamReader.
                 using (FileStream fs = File.OpenRead(_fileName))
                 {
-                    byte[] data = new byte[fs.Length];
+                    byte[] data;
+                    if (_needDecode)
+                    {
+                        data = new byte[_width * _height / 8];
+                    }
+                    else
+                    {
+                        data = new byte[_width * _height];
+                    }
                     // Read and display lines from the file until the end of 
                     // the file is reached.
                     fs.Read(data, 0, data.Length);
@@ -127,6 +137,106 @@ namespace InfoReadOut
                 return new byte[1];
             }
         }
+
+        public static Data ReadRestInfo(String _fileName, UInt16 _width, UInt16 _height, Boolean _needDecode)
+        {
+            Data d = new Data(_height);
+            try
+            {
+                using (FileStream fs = File.OpenRead(_fileName))
+                {
+                    int startPos;
+                    if (_needDecode)
+                    {
+                        startPos = _width * _height / 8;
+                    }
+                    else
+                    {
+                        startPos = _width * _height;
+                    }
+                    Byte[] data = new Byte[fs.Length - startPos];
+
+                    fs.Seek(startPos, SeekOrigin.Begin);
+                    fs.Read(data, 0, data.Length);
+
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        if (i < _height * 2)
+                        {
+                            d.BlackR[i / 2, 0] = data[i];
+                            d.BlackR[i / 2, 1] = data[i + 1];
+                            i++;
+                        }
+                        else
+                        {
+                            if (i < _height * 4)
+                            {
+                                d.BlackL[i / 2 - _height, 0] = data[i];
+                                d.BlackL[i / 2 - _height, 1] = data[i + 1];
+                                i++;
+                            }
+                            else
+                            {
+                                if (i < _height * 5)
+                                {
+                                    d.BlackLine[i - _height * 4] = data[i];
+                                }
+                                else
+                                {
+                                    if (i < _height * 5 + 12)
+                                    {
+                                        d.A[0] = (Int32)(data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24));
+                                        i += 4;
+                                        d.A[1] = (Int32)(data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24));
+                                        i += 4;
+                                        d.A[2] = (Int32)(data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24));
+                                        i += 4;
+                                    }
+                                    else
+                                    {
+                                        if (i < _height * 5 + 24)
+                                        {
+                                            d.AT[0] = (Int16)(data[i] | (data[i + 1] << 8));
+                                            i += 4;
+                                            d.AT[1] = (Int16)(data[i] | (data[i + 1] << 8));
+                                            i += 4;
+                                            d.AT[2] = (Int16)(data[i] | (data[i + 1] << 8));
+                                            i += 4;
+                                        }
+                                        else
+                                        {
+                                            if (i < _height * 5 + 28)
+                                            {
+                                                d.SPD = (Int32)(data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24));
+                                                i += 4;
+                                            }
+                                            else
+                                            {
+                                                if (i < _height * 5 + 32)
+                                                {
+                                                    d.SPT = (Int32)(data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24));
+                                                    i += 4;
+                                                }
+                                                else
+                                                {
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageSender.e = ex;
+            }
+            return d;
+        }
+        #endregion
+
         /// <summary>  
         /// 将有用的图像信息提取
         /// </summary>  
@@ -153,6 +263,8 @@ namespace InfoReadOut
 
             return _line;
         }
+
+        #region ConvertInfo
         /// <summary>  
         /// 字符串转换成数值(+1重载)
         /// </summary>  
@@ -278,7 +390,7 @@ namespace InfoReadOut
             {
 
                 foreach (Byte b in _info)
-                {                    
+                {
                     hex = b;
                     if (_needDecode)
                     {
@@ -311,7 +423,7 @@ namespace InfoReadOut
                             break;
                         }
                     }
-                    
+
 
                 }
 
@@ -323,6 +435,8 @@ namespace InfoReadOut
             }
             return bytearray;
         }
+        #endregion
+
         private static UInt16[] Decode(UInt16 _info)
         {
             UInt16[] info = new UInt16[8];
@@ -344,5 +458,6 @@ namespace InfoReadOut
         {
 
         }
+
     }
 }

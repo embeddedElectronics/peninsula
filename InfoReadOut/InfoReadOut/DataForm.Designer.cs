@@ -34,17 +34,18 @@
             // textBox_Data
             // 
             this.textBox_Data.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox_Data.Enabled = false;
             this.textBox_Data.Location = new System.Drawing.Point(0, 0);
             this.textBox_Data.Multiline = true;
             this.textBox_Data.Name = "textBox_Data";
-            this.textBox_Data.Size = new System.Drawing.Size(284, 262);
+            this.textBox_Data.Size = new System.Drawing.Size(284, 284);
             this.textBox_Data.TabIndex = 0;
             // 
             // DataForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 284);
             this.Controls.Add(this.textBox_Data);
             this.Name = "DataForm";
             this.Text = "DataForm";

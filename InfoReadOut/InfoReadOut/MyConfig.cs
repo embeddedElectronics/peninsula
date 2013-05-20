@@ -8,6 +8,7 @@ namespace InfoReadOut
         public String FolderPath { set; get; }
         public Boolean NeedDecode { set; get; }
         public Boolean SDFile { set; get; }
+        public Boolean MoreData { set; get; }
         public String Filter_DataFile { set; get; }
         public String Filter_ImageFile { set; get; }
         public UInt16 Width { set; get; }
@@ -35,6 +36,7 @@ namespace InfoReadOut
             this.ThreadNum = DefaultSetting.threadNum;
             this.NeedDecode = true;
             this.SDFile = false;
+            this.MoreData = false;
         }
     }
     public static class DefaultSetting
