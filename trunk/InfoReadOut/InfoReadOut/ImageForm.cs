@@ -13,7 +13,7 @@ namespace InfoReadOut
         MyConfig config;
         DataForm dataForm;
         int index = 0;
-        bool bProc = false;
+        bool bProc = true, bMoreData = false;
         public ImageForm()
         {
             InitializeComponent();
@@ -33,6 +33,20 @@ namespace InfoReadOut
             imgProc = _imgProc;
             imgFileNames = _imgFileNames;
             GC.Collect();
+            bMoreData = true;
+            index = 0;
+            pictureBox.Image = imgProc[0];
+        }
+        /// <summary>
+        /// 图像显示刷新
+        /// </summary>
+        /// <param name="_img">要显示的图像</param>
+        public void ImageRefresh(List<Bitmap> _img, String[] _imgFileNames)
+        {
+            img = _img;
+            imgFileNames = _imgFileNames;
+            GC.Collect();
+            bMoreData = false;
             index = 0;
             pictureBox.Image = img[0];
         }
@@ -72,13 +86,20 @@ namespace InfoReadOut
         /// </summary>
         public void ImageSwitch()
         {
-            if (bProc)
+            if (bMoreData)
             {
-                pictureBox.Image = img[index];
-            } 
+                if (bProc)
+                {
+                    pictureBox.Image = imgProc[index];
+                }
+                else
+                {
+                    pictureBox.Image = img[index];
+                }
+            }
             else
             {
-                pictureBox.Image = imgProc[index];
+                pictureBox.Image = img[index];
             }
         }
         private void ImageForm_KeyDown(object sender, KeyEventArgs e)

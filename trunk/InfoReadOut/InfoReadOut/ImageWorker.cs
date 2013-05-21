@@ -187,7 +187,7 @@ namespace InfoReadOut
             myColor = Color.Blue;
             for (int i = 0; i < data.BlackLine.Length; i++)
             {
-                if (data.BlackL[i, 1] != 255 && data.BlackL[i, 0] != 255)
+                if (data.BlackR[i, 1] != 255 && data.BlackR[i, 0] != 255)
                 {
                     bm.SetPixel(width - data.BlackR[i, 1] - 1, height - data.BlackR[i, 0] - 1, myColor);
                 }

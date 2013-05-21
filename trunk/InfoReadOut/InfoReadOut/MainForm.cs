@@ -149,8 +149,14 @@ namespace InfoReadOut
                     ImageData.AddRange(ThreadImageData[i]);
                     MoreData.AddRange(ThreadMoreData[i]);
                 }
-
-                imgForm.ImageRefresh(ImageSend, ImageProc, ImageFileNames);
+                if (checkBox_MoreData.Checked)
+                {
+                    imgForm.ImageRefresh(ImageSend, ImageProc, ImageFileNames);
+                } 
+                else
+                {
+                    imgForm.ImageRefresh(ImageSend, ImageFileNames);
+                }
                 imgForm.Show();
                 dataForm.DataRefresh(MoreData);
                 dataForm.Show();
