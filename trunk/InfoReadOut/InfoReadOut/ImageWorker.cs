@@ -184,7 +184,7 @@ namespace InfoReadOut
                     bm.SetPixel(width - data.BlackL[i, 1] - 1, height - data.BlackL[i, 0] - 1, myColor);
                 }
             }
-
+            myColor = Color.Blue;
             for (int i = 0; i < data.BlackLine.Length; i++)
             {
                 if (data.BlackL[i, 1] != 255 && data.BlackL[i, 0] != 255)
