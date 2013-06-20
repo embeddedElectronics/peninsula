@@ -23,17 +23,17 @@ namespace InfoReadOut
         {
             String temp = "";
 
-            temp += "A:";
+            temp += "Accelerometer:";
             foreach (Int64 i in this.A)
             {
                 temp += String.Format(" {0}", i);
             }
-            temp += "\r\nAT:";
+            temp += "\r\nGyro:";
             foreach (Int64 i in this.AT)
             {
                 temp += String.Format(" {0}", i);
             }
-            temp += String.Format("\r\nSPD:{0} SPT:{1}", this.SPD, this.SPT);
+            temp += String.Format("\r\nVelocimetry:{0} Motor:{1}", this.SPD, this.SPT);
             return temp;
         }
     }
